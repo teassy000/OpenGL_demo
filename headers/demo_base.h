@@ -16,8 +16,6 @@ public:
 	~GL_Demo_Base(){}
 	void Init(int argc, char** argv);
 	virtual void InitWindow(int argc, char** argv);
-	void ResizeViewport(int width, int hight);
-	void RenderFunc(void);
 };
 
 void GL_Demo_Base::Init(int argc, char** argv)
@@ -37,7 +35,7 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 
-	glutInitContextVersion(4, 2);
+	glutInitContextVersion(4, 0);
 	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
@@ -47,17 +45,19 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 }
 
+// glutReshapeFunc and glutDisplayFunc expect a c style callback func, so delete them here.
+/*
 void GL_Demo_Base::ResizeViewport(int width, int hight)
 {
 	glViewport(0, 0, width, hight);
-}
+}*/
 
-void GL_Demo_Base::RenderFunc()
+/*void GL_Demo_Base::RenderFunc()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glutSwapBuffers();
-}
+}*/
 
 
 
