@@ -14,8 +14,20 @@ class GL_Demo_Base
 public:
 	GL_Demo_Base(){}
 	~GL_Demo_Base(){}
+
 	void Init(int argc, char** argv);
 	virtual void InitWindow(int argc, char** argv);
+
+	static void ResizeViewport(int width, int hight);
+	static void RenderFunc(void);
+//	static void CleanUp(void);
+
+	// here are idle functions.
+	void Cleanup(void);
+	void CreateVBO(void);
+	void DestroyVBO(void);
+	void CreateShaders(void);
+	void DestroyShaders(void);
 };
 
 void GL_Demo_Base::Init(int argc, char** argv)
@@ -28,7 +40,10 @@ void GL_Demo_Base::Init(int argc, char** argv)
 		glGetString(GL_VERSION)
 		);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+// 	CreateShaders();
+//	CreateVBO();
+
+	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void GL_Demo_Base::InitWindow(int argc, char** argv)
@@ -45,22 +60,16 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 }
 
-// glutReshapeFunc and glutDisplayFunc expect a c style callback func, so delete them here.
-/*
 void GL_Demo_Base::ResizeViewport(int width, int hight)
 {
 	glViewport(0, 0, width, hight);
-}*/
+}
 
-/*void GL_Demo_Base::RenderFunc()
+void GL_Demo_Base::RenderFunc()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glutSwapBuffers();
-}*/
-
-
-
-
+}
 
 #endif //_DEMO_BASE_H_

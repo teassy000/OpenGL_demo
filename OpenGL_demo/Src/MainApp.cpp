@@ -4,15 +4,55 @@
 static const int WIDTH = 1024;
 static const int HIGHT = 720;
 
-static void ResizeViewport(int width, int hight);
-static void RenderFunc();
+// callback by glut, should same as "c" style.
+
+GLuint
+	VertexShaderId,
+	FragmentShaderId,
+	ProgramId,
+	VaoId,
+	VboId,
+	ColorBufferId;
+
+// Here to set the interim shader. 
+// Note: need to integrate a LoadShader class.
+
+// -- This is vertex shader.
+const GLchar* VertexShader = 
+{
+	"#version 400\n"\
+
+	"layout(location=0) in vec4 in_Position;\n"\
+	"layout(location=1) in vec4 in_Color;\n"\
+	"out vec4 ex_Color;\n"\
+
+	"void main(void)\n"\
+	"{\n"\
+	"  gl_Position = in_Position;\n"\
+	"  ex_Color = in_Color;\n"\
+	"}\n"
+};
+
+// -- This is fragment shader.
+const GLchar* FragmentShader = 
+{
+	"#version 400\n"\
+
+	"in vec4 ex_color;\n"\
+	"out vec4 color\n"\
+
+	"void main(void)\n"\
+	"{\n"\
+	"	color = ex_color;\n"\
+	"}\n"
+};
+
 
 class MainApp : public GL_Demo_Base{
 public:
 	MainApp() :WindowHandler(0){};
 	~MainApp(){};
 	void InitWindow(int argc, char** argv);
-//	void ResizeViewport(int width, int hight);
 private:
 	int WindowHandler;
 }app;
@@ -34,16 +74,8 @@ void MainApp::InitWindow(int argc, char** argv)
 	glutReshapeFunc(ResizeViewport);
 	glutDisplayFunc(RenderFunc);
 }
-
-// glutReshapeFunc and glutDisplayFunc expect a c style callback func, so delete them here.
 /*
-void MainApp::ResizeViewport(int newwidth, int newhight)
-{
-	GL_Demo_Base::ResizeViewport(newwidth, newwidth);
-}
-*/
-
-static void ResizeViewport(int width, int hight)
+static void GL_Demo_Base::ResizeViewport(int width, int hight)
 {
 	glViewport(0, 0, width, hight);
 }
@@ -53,6 +85,12 @@ static void RenderFunc()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glutSwapBuffers();
+}
+*/
+static void CleanUp()
+{
+	// here the problem is 
+	// 
 }
 
 int main(int argc, char** argv)
