@@ -1,8 +1,14 @@
 #include "demo_base.h"
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <ostream>
 
 #define WINDOW_TITLE_PREFIX "First_Runnable_Demo"
 static const int WIDTH = 1024;
 static const int HIGHT = 720;
+
+static void TimerFunc(int);
 
 // callback by glut, should same as "c" style.
 
@@ -50,7 +56,7 @@ const GLchar* FragmentShader =
 
 class MainApp : public GL_Demo_Base{
 public:
-	MainApp() :WindowHandler(0){};
+	MainApp(){};
 	~MainApp(){};
 	void InitWindow(int argc, char** argv);
 private:
@@ -73,24 +79,33 @@ void MainApp::InitWindow(int argc, char** argv)
 
 	glutReshapeFunc(ResizeViewport);
 	glutDisplayFunc(RenderFunc);
-}
-/*
-static void GL_Demo_Base::ResizeViewport(int width, int hight)
-{
-	glViewport(0, 0, width, hight);
+	glutIdleFunc(IdleFunc);
+	glutTimerFunc(0, TimerFunc, 0);
 }
 
-static void RenderFunc()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glutSwapBuffers();
-}
-*/
 static void CleanUp()
 {
-	// here the problem is 
-	// 
+
+}
+
+void TimerFunc(int value)
+{
+	if (0 != value)
+	{
+
+		std::ostringstream oss;
+		oss << WINDOW_TITLE_PREFIX << FrameCount * 4 << " : " << " Frames Per Second @ " 
+			<< app.CurrentWidth << " x " << app.CurrentHeight << std::endl;
+
+		std::string str = oss.str();
+
+		const char* chr = str.c_str();
+
+		glutSetWindowTitle(chr);
+	}
+
+	FrameCount = 0;
+	glutTimerFunc(250, TimerFunc, 1);
 }
 
 int main(int argc, char** argv)

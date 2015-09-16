@@ -9,10 +9,13 @@
 #include "freeglut.h"
 
 
+static unsigned FrameCount = 0;
+
 class GL_Demo_Base
 {
 public:
-	GL_Demo_Base(){}
+	GL_Demo_Base() 
+		: CurrentWidth(800), CurrentHeight(600), WindowHandle(0){}
 	~GL_Demo_Base(){}
 
 	void Init(int argc, char** argv);
@@ -20,6 +23,7 @@ public:
 
 	static void ResizeViewport(int width, int hight);
 	static void RenderFunc(void);
+	static void IdleFunc(void);
 //	static void CleanUp(void);
 
 	// here are idle functions.
@@ -28,6 +32,10 @@ public:
 	void DestroyVBO(void);
 	void CreateShaders(void);
 	void DestroyShaders(void);
+
+	int CurrentWidth;
+	int CurrentHeight;
+	int WindowHandle;
 };
 
 void GL_Demo_Base::Init(int argc, char** argv)
@@ -67,9 +75,18 @@ void GL_Demo_Base::ResizeViewport(int width, int hight)
 
 void GL_Demo_Base::RenderFunc()
 {
+	++FrameCount;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glutSwapBuffers();
 }
+
+void GL_Demo_Base::IdleFunc()
+{
+	glutPostRedisplay();
+}
+
+
 
 #endif //_DEMO_BASE_H_
