@@ -4,34 +4,48 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
+#include <iostream>
+#include <ostream>
+
+#include <sstream>
 
 #include "GL/glew.h"
 #include "freeglut.h"
 
-
+static const int WIDTH = 1024;
+static const int HIGHT = 720;
 static unsigned FrameCount = 0;
 
 class GL_Demo_Base
 {
+protected:
+	static void ResizeViewportFunc(int width, int hight);
+	static void RenderFunc(void);
+	static void IdleFunc(void);
+	static void TimerFunc(int);
+
+	static void CleanUpFunc(void);
+	static void CreateVBO(void);
+	static void DestroyVBO(void);
+	static void CreateShaders(void);
+	static void DestroyShaders(void);
+
 public:
 	GL_Demo_Base() 
 		: CurrentWidth(800), CurrentHeight(600), WindowHandle(0){}
 	~GL_Demo_Base(){}
 
+	static GL_Demo_Base* s_app;
+
 	void Init(int argc, char** argv);
-	virtual void InitWindow(int argc, char** argv);
+	void InitWindow(int argc, char** argv);
 
-	static void ResizeViewport(int width, int hight);
-	static void RenderFunc(void);
-	static void IdleFunc(void);
-//	static void CleanUp(void);
+	void ResizeViewport(int width, int hight);
+	void Render(void);
+	void Idle(void);
+	void CleanUp(void);
+	void Timer(int);
 
-	// here are idle functions.
-	void Cleanup(void);
-	void CreateVBO(void);
-	void DestroyVBO(void);
-	void CreateShaders(void);
-	void DestroyShaders(void);
 
 	int CurrentWidth;
 	int CurrentHeight;
@@ -42,16 +56,22 @@ void GL_Demo_Base::Init(int argc, char** argv)
 {
 	InitWindow(argc, argv);
 
-	fprintf(
-		stdout,
-		"INFO: OpenGL Version: %s\n",
-		glGetString(GL_VERSION)
-		);
+	WindowHandle = glutCreateWindow("OpenGL_Demo");
 
-// 	CreateShaders();
-//	CreateVBO();
+	if (WindowHandle < 1)
+	{
+		std::cerr << "ERROR: Could not create a new rendering window.\n" << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
-	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+	std::cout << "INFO: OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
+
+	glClearColor(0.8f, 0.8f, 0.6f, 0.0f);
+
+	glutReshapeFunc(ResizeViewportFunc);
+	glutDisplayFunc(RenderFunc);
+	glutIdleFunc(IdleFunc);
+
 }
 
 void GL_Demo_Base::InitWindow(int argc, char** argv)
@@ -66,11 +86,9 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 		GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-}
 
-void GL_Demo_Base::ResizeViewport(int width, int hight)
-{
-	glViewport(0, 0, width, hight);
+	glutTimerFunc(0, TimerFunc, 0);
+	glutCloseFunc(CleanUpFunc);
 }
 
 void GL_Demo_Base::RenderFunc()
@@ -82,11 +100,68 @@ void GL_Demo_Base::RenderFunc()
 	glutSwapBuffers();
 }
 
+void GL_Demo_Base::ResizeViewportFunc(int width, int hight)
+{
+
+	glViewport(140, 140, width, hight);
+}
+
 void GL_Demo_Base::IdleFunc()
 {
 	glutPostRedisplay();
 }
 
+void GL_Demo_Base::CleanUpFunc()
+{
+	//DestroyShaders();
+	//DestroyVBO();
+}
 
+void GL_Demo_Base::TimerFunc(int value)
+{
+	if (0 != value)
+	{
+		std::ostringstream oss;
+		oss << "GL_Demo" << FrameCount * 4 << " : " << " Frames Per Second @ "
+			<< WIDTH << " x " << HIGHT << std::endl;
+
+		std::string str = oss.str();
+		const char* chr = str.c_str();
+
+		glutSetWindowTitle(chr);
+	}
+
+	FrameCount = 0;
+	glutTimerFunc(250, TimerFunc, 1);
+}
+
+//===============================================
+//===== here to point all callback functions.
+//===============================================
+GL_Demo_Base * GL_Demo_Base::s_app;
+void GL_Demo_Base::Render()
+{
+	s_app->RenderFunc();
+}
+
+void GL_Demo_Base::ResizeViewport(int width, int hight)
+{
+	s_app->ResizeViewportFunc(width, hight);
+}
+
+void GL_Demo_Base::Idle()
+{
+	s_app->IdleFunc();
+}
+
+void GL_Demo_Base::CleanUp()
+{
+	s_app->CleanUpFunc();
+}
+
+void GL_Demo_Base::Timer(int value)
+{
+	s_app->TimerFunc(value);
+}
 
 #endif //_DEMO_BASE_H_
