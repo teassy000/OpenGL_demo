@@ -48,7 +48,6 @@ class MainApp : public GL_Demo_Base{
 public:
 	MainApp(){};
 	~MainApp(){};
-//	void InitWindow(int argc, char** argv);
 }app;
 
 int main(int argc, char** argv)

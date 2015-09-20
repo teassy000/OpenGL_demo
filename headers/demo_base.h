@@ -97,6 +97,10 @@ void GL_Demo_Base::RenderFunc()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+	//Need: Draw stuff in another file.
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
 	glutSwapBuffers();
 }
 
@@ -135,10 +139,12 @@ void GL_Demo_Base::TimerFunc(int value)
 	glutTimerFunc(250, TimerFunc, 1);
 }
 
+
+
 //===============================================
 //===== here to point all callback functions.
 //===============================================
-GL_Demo_Base * GL_Demo_Base::s_app;
+
 void GL_Demo_Base::Render()
 {
 	s_app->RenderFunc();
