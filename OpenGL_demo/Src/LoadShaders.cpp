@@ -31,7 +31,42 @@ static const GLchar* ReadShader(std::string filename)
 
 GLuint LoadShader(ShaderInfo* shaders)
 {
-	// Read shaders 
+	if (shaders == NULL) return 0;
 
+	GLuint program = glCreateProgram();
+
+	ShaderInfo* entry = shaders;
+	while (entry->type != GL_NONE)
+	{
+		GLuint shader = glCreateShader(entry->type);
+		entry->shader = shader;
+
+		const GLchar* source = ReadShader(entry->fileName);
+		if (source == NULL)
+		{
+			for (entry = shaders; entry->type != GL_NONE; ++entry)
+			{
+				glDeleteShader(entry->shader);
+				entry->shader = 0;
+			}
+			return 0;
+		}
+		glShaderSource(shader, 1, &source, NULL);
+		delete[] source;
+
+		glCompileShader(shader);
+
+		// check error
+
+		//attach shader to program
+		// check error
+
+		++entry;
+	}
+
+
+	// link program
+	// check error
+	return program;
 }
 

@@ -18,9 +18,15 @@
     <ClInclude Include="..\headers\demo_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\headers\LoadShaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\MainApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\LoadShaders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
