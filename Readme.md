@@ -7,8 +7,10 @@ What is it
 This demo is using morden OpenGL(3.3 or later) and with the purpose of understanding shaders.
 
 And this demo is anticipating to be a :
-	- render enging
-	- partical system.
+	
+- render enging
+	
+- partical system.
 
 Feature
 -----------------------
