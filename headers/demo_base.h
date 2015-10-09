@@ -64,6 +64,12 @@ void GL_Demo_Base::Init(int argc, char** argv)
 		exit(EXIT_FAILURE);
 	}
 
+	int err = glewInit();
+	if (GLEW_OK != err)
+	{
+		std::cerr << "ERROR: Init glew failed. Info : " << glewGetErrorString(err)<< std::endl;
+	}
+
 	std::cout << "INFO: OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
 
 	glClearColor(0.8f, 0.8f, 0.6f, 0.0f);

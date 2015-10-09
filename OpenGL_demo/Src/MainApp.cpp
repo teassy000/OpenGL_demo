@@ -1,4 +1,5 @@
 #include "demo_base.h"
+#include "LoadShaders.h"
 
 #define WINDOW_TITLE_PREFIX "First_Runnable_Demo"
 
@@ -48,7 +49,22 @@ class MainApp : public GL_Demo_Base{
 public:
 	MainApp(){};
 	~MainApp(){};
+	void Init(int argc, char** argv);
 }app;
+
+void MainApp::Init(int argc, char** argv)
+{
+	GL_Demo_Base::Init(argc, argv);
+
+	ShaderInfo shader_info[] = {
+		{ GL_VERTEX_SHADER, "D:/OpenGL/oglpg-8th-edition/03/ch03_pointsprites/pointsprites.vs.glsl", 0 },
+		{ GL_FRAGMENT_SHADER, "D:/OpenGL/oglpg-8th-edition/03/ch03_pointsprites/pointsprites.fs.glsl", 0 },
+		{ GL_NONE, NULL, 0 }
+	};
+
+	LoadShader(shader_info);
+}
+
 
 int main(int argc, char** argv)
 {

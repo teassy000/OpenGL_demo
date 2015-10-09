@@ -29,7 +29,12 @@ Planing
 ------------------------
 
 10/08/2015 :
+
 	test loadShader class.
+
+10/09/2015 ： 
+	
+	LoadShader has run time null pointer, need fix it.
 
 
 

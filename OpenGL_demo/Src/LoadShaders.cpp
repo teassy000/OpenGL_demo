@@ -24,7 +24,7 @@ static const GLchar* ReadShader(std::string filename)
 	tempStr.assign(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
 
 	GLchar* source = new GLchar[tempStr.length() + 1];
-	strcpy(source, tempStr.c_str());
+	strcpy_s(source, tempStr.length() + 1, tempStr.c_str());
 
 	return const_cast<const GLchar*>(source);
 }
@@ -80,6 +80,7 @@ GLuint LoadShader(ShaderInfo* shaders)
 
 	glLinkProgram(program);
 	GLint linked;
+	glGetProgramiv(program, GL_LINK_STATUS, &linked);
 	if (!linked)
 	{
 #ifdef _DEBUG
