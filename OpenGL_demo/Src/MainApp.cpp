@@ -56,10 +56,10 @@ void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
 
-	ShaderInfo shader_info[] = {
+	static ShaderInfo shader_info[] = {
 		{ GL_VERTEX_SHADER, "D:/OpenGL/oglpg-8th-edition/03/ch03_pointsprites/pointsprites.vs.glsl", 0 },
 		{ GL_FRAGMENT_SHADER, "D:/OpenGL/oglpg-8th-edition/03/ch03_pointsprites/pointsprites.fs.glsl", 0 },
-		{ GL_NONE, NULL, 0 }
+		{ GL_NONE, "", 0 }
 	};
 
 	LoadShader(shader_info);
