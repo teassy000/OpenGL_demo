@@ -30,11 +30,13 @@ Planing
 
 10/08/2015 :
 
-	test loadShader class.
+	finish loadShader class(completed).
 
 10/09/2015 ： 
 	
-	LoadShader has run time null pointer, need fix it.
+	LoadShader has run time null pointer, need fix it(fixed).
+10/13/2015 ：
 
+	Implement some to test shader loading stream.
 
 

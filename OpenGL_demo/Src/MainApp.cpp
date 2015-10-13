@@ -11,40 +11,6 @@ GLuint
 	VboId,
 	ColorBufferId;
 
-// Here to set the interim shader. 
-// Note: need to integrate a LoadShader class.
-
-// -- This is vertex shader.
-const GLchar* VertexShader = 
-{
-	"#version 400\n"\
-
-	"layout(location=0) in vec4 in_Position;\n"\
-	"layout(location=1) in vec4 in_Color;\n"\
-	"out vec4 ex_Color;\n"\
-
-	"void main(void)\n"\
-	"{\n"\
-	"  gl_Position = in_Position;\n"\
-	"  ex_Color = in_Color;\n"\
-	"}\n"
-};
-
-// -- This is fragment shader.
-const GLchar* FragmentShader = 
-{
-	"#version 400\n"\
-
-	"in vec4 ex_color;\n"\
-	"out vec4 color\n"\
-
-	"void main(void)\n"\
-	"{\n"\
-	"	color = ex_color;\n"\
-	"}\n"
-};
-
-
 class MainApp : public GL_Demo_Base{
 public:
 	MainApp(){};
@@ -57,8 +23,8 @@ void MainApp::Init(int argc, char** argv)
 	GL_Demo_Base::Init(argc, argv);
 
 	static ShaderInfo shader_info[] = {
-		{ GL_VERTEX_SHADER, "D:/OpenGL/oglpg-8th-edition/03/ch03_pointsprites/pointsprites.vs.glsl", 0 },
-		{ GL_FRAGMENT_SHADER, "D:/OpenGL/oglpg-8th-edition/03/ch03_pointsprites/pointsprites.fs.glsl", 0 },
+		{ GL_VERTEX_SHADER, "../shader/test.vert", 0 },
+		{ GL_FRAGMENT_SHADER, "../shader/test.frag", 0 },
 		{ GL_NONE, "", 0 }
 	};
 

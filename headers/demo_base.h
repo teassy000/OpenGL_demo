@@ -113,7 +113,7 @@ void GL_Demo_Base::RenderFunc()
 void GL_Demo_Base::ResizeViewportFunc(int width, int hight)
 {
 
-	glViewport(140, 140, width, hight);
+	glViewport(800, 600, width, hight);
 }
 
 void GL_Demo_Base::IdleFunc()
