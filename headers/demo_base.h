@@ -72,7 +72,7 @@ void GL_Demo_Base::Init(int argc, char** argv)
 
 	std::cout << "INFO: OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
 
-	glClearColor(0.8f, 0.8f, 0.6f, 0.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);
@@ -105,7 +105,7 @@ void GL_Demo_Base::RenderFunc()
 
 
 	//Need: Draw stuff in another file.
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	glutSwapBuffers();
 }

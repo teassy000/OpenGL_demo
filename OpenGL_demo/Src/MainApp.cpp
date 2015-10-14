@@ -11,6 +11,8 @@ GLuint
 	VboId,
 	ColorBufferId;
 
+
+
 class MainApp : public GL_Demo_Base{
 public:
 	MainApp(){};
@@ -22,13 +24,16 @@ void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
 
+
 	static ShaderInfo shader_info[] = {
 		{ GL_VERTEX_SHADER, "../shader/test.vert", 0 },
 		{ GL_FRAGMENT_SHADER, "../shader/test.frag", 0 },
 		{ GL_NONE, "", 0 }
 	};
 
-	LoadShader(shader_info);
+	ProgramId = LoadShader(shader_info);
+
+	glUseProgram(ProgramId);
 }
 
 

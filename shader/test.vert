@@ -1,11 +1,8 @@
 #version 400
 
-layout(location=0) in vec4 in_Position;
-layout(location=1) in vec4 in_Color;
-out vec4 ex_Color;
+out vec4 ex_color;
 
-void main(void)
+void main()
 {
-  gl_Position = in_Position;
-  ex_Color = (1.0， 1.0， 1.0， 1.0);
+   ex_color = vec4(0.5f, 0.7f, 0.8f, 1.0f);
 }

@@ -1,9 +1,9 @@
 #version 400
 
 in vec4 ex_color;
-out vec4 color
+out vec4 FragColor;
 
-void main(void)
+void main()
 {
-	color = ex_color;
+	FragColor = ex_color;
 }
