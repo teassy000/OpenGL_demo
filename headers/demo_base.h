@@ -11,6 +11,7 @@
 
 #include "GL/glew.h"
 #include "freeglut.h"
+#include "vmath.h"
 
 static const int WIDTH = 1024;
 static const int HIGHT = 720;
@@ -25,7 +26,6 @@ protected:
 	static void TimerFunc(int);
 
 	static void CleanUpFunc(void);
-	static void CreateVBO(void);
 	static void DestroyVBO(void);
 	static void CreateShaders(void);
 	static void DestroyShaders(void);
@@ -41,7 +41,7 @@ public:
 	void InitWindow(int argc, char** argv);
 
 	void ResizeViewport(int width, int hight);
-	void Render(void);
+	virtual void Render(void);
 	void Idle(void);
 	void CleanUp(void);
 	void Timer(int);
@@ -102,10 +102,6 @@ void GL_Demo_Base::RenderFunc()
 	++FrameCount;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-	//Need: Draw stuff in another file.
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	glutSwapBuffers();
 }
