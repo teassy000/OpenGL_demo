@@ -38,5 +38,10 @@ Planing
 10/13/2015 ：
 
 	Implement some to test shader loading stream.
+10/16/2015 :
+
+	- Needs to separate glLinkPragram out from LoadShader func so that we can use glBindAttribLocation.
+
+	- A little confuse about base class, need to think about which interface is indispensable.
 
 
