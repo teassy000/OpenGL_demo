@@ -32,7 +32,7 @@ protected:
 
 public:
 	GL_Demo_Base() 
-		: CurrentWidth(800), CurrentHeight(600), WindowHandle(0){}
+		: CurrentWidth(WIDTH), CurrentHeight(HIGHT), WindowHandle(0){}
 	~GL_Demo_Base(){}
 
 	static GL_Demo_Base* s_app;
@@ -63,7 +63,7 @@ void GL_Demo_Base::Init(int argc, char** argv)
 		std::cerr << "ERROR: Could not create a new rendering window.\n" << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
+	glewExperimental = GL_TRUE;
 	int err = glewInit();
 	if (GLEW_OK != err)
 	{
@@ -72,7 +72,7 @@ void GL_Demo_Base::Init(int argc, char** argv)
 
 	std::cout << "INFO: OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
 
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);
@@ -101,15 +101,13 @@ void GL_Demo_Base::RenderFunc()
 {
 	++FrameCount;
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glutSwapBuffers();
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void GL_Demo_Base::ResizeViewportFunc(int width, int hight)
 {
 
-	glViewport(800, 600, width, hight);
+	glViewport(100, 100, width, hight);
 }
 
 void GL_Demo_Base::IdleFunc()
@@ -119,8 +117,7 @@ void GL_Demo_Base::IdleFunc()
 
 void GL_Demo_Base::CleanUpFunc()
 {
-	//DestroyShaders();
-	//DestroyVBO();
+
 }
 
 void GL_Demo_Base::TimerFunc(int value)

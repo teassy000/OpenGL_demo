@@ -40,8 +40,11 @@ Planing
 	Implement some to test shader loading stream.
 10/16/2015 :
 
-	- Needs to separate glLinkPragram out from LoadShader func so that we can use glBindAttribLocation.
+	- Needs to separate glLinkPragram out from LoadShader func so that we can use glBindAttribLocation(Done).
+
 
 	- A little confuse about base class, need to think about which interface is indispensable.
+
+		- Found that Function Render in mApp is not called, needs fix(application appears white)!
 
 

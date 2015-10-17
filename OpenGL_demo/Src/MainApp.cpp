@@ -8,7 +8,7 @@ GLuint
 	VertexShaderId,
 	FragmentShaderId,
 	ProgramId,
-	VaoId,
+	VaoId = 0,
 	VboId,
 	PositionBufferId,
 	ColorBufferId;
@@ -50,7 +50,13 @@ void MainApp::Init(int argc, char** argv)
 
 	ProgramId = LoadShader(shader_info);
 
+	glBindAttribLocation(ProgramId, 0, "vert_pos");
+	glBindAttribLocation(ProgramId, 0, "vert_color");
+	
+	LinkShader(ProgramId, shader_info);
+
 	glUseProgram(ProgramId);
+
 
 	// "model_matrix" is actually an array of 4 matrices
 	render_model_matrix_loc = glGetUniformLocation(ProgramId, "model_matrix");
@@ -68,17 +74,28 @@ void MainApp::Init(int argc, char** argv)
 	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), colorData, GL_STATIC_DRAW);
 
 	// Create a set of vertex array object.
+	
+	glGenVertexArrays(1, &VaoId);
+	glBindVertexArray(VaoId);
 
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
+	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 
+	glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 }
 
 void MainApp::Render(void)
 {
-	float t = float(GetTickCount() & 0x1FFF) / float(0x1FFF);
-	
+	GL_Demo_Base::Render();
+	glBindVertexArray(VaoId);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	
+	std::cout << "aaaaaaaaaaaaaa"<< std::endl;
+	glutSwapBuffers();
 }
 
 

@@ -14,6 +14,7 @@ struct ShaderInfo
 };
 
 GLuint LoadShader(ShaderInfo*);
+GLuint LinkShader(GLuint, ShaderInfo*);
 
 
 #endif // !_LOAD_SHADERS_H_
