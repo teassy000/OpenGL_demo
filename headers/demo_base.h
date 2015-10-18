@@ -20,9 +20,6 @@ static unsigned FrameCount = 0;
 class GL_Demo_Base
 {
 protected:
-	static void ResizeViewportFunc(int width, int hight);
-	static void RenderFunc(void);
-	static void IdleFunc(void);
 	static void TimerFunc(int);
 
 	static void CleanUpFunc(void);
@@ -39,13 +36,6 @@ public:
 
 	void Init(int argc, char** argv);
 	void InitWindow(int argc, char** argv);
-
-	void ResizeViewport(int width, int hight);
-	virtual void Render(void);
-	void Idle(void);
-	void CleanUp(void);
-	void Timer(int);
-
 
 	int CurrentWidth;
 	int CurrentHeight;
@@ -74,10 +64,6 @@ void GL_Demo_Base::Init(int argc, char** argv)
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	glutReshapeFunc(ResizeViewportFunc);
-	glutDisplayFunc(RenderFunc);
-	glutIdleFunc(IdleFunc);
-
 }
 
 void GL_Demo_Base::InitWindow(int argc, char** argv)
@@ -97,29 +83,6 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 	glutCloseFunc(CleanUpFunc);
 }
 
-void GL_Demo_Base::RenderFunc()
-{
-	++FrameCount;
-
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void GL_Demo_Base::ResizeViewportFunc(int width, int hight)
-{
-
-	glViewport(100, 100, width, hight);
-}
-
-void GL_Demo_Base::IdleFunc()
-{
-	glutPostRedisplay();
-}
-
-void GL_Demo_Base::CleanUpFunc()
-{
-
-}
-
 void GL_Demo_Base::TimerFunc(int value)
 {
 	if (0 != value)
@@ -136,27 +99,6 @@ void GL_Demo_Base::TimerFunc(int value)
 
 	FrameCount = 0;
 	glutTimerFunc(250, TimerFunc, 1);
-}
-
-
-
-//===============================================
-//===== here to point all callback functions.
-//===============================================
-
-void GL_Demo_Base::Render()
-{
-	s_app->RenderFunc();
-}
-
-void GL_Demo_Base::ResizeViewport(int width, int hight)
-{
-	s_app->ResizeViewportFunc(width, hight);
-}
-
-void GL_Demo_Base::Idle()
-{
-	s_app->IdleFunc();
 }
 
 void GL_Demo_Base::CleanUp()

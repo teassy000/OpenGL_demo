@@ -30,17 +30,25 @@ float colorData[] = {
 
 
 class MainApp : public GL_Demo_Base{
+protected:
+	static void ResizeViewportFunc(int width, int hight);
+	static void RenderFunc(void);
+	static void IdleFunc(void);
 public:
 	MainApp(){};
 	~MainApp(){};
 	void Init(int argc, char** argv);
-	virtual void Render(void);
+
+	static MainApp* p_mApp;
 }app;
 
 void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
 
+	glutReshapeFunc(ResizeViewportFunc);
+	glutDisplayFunc(RenderFunc);
+	glutIdleFunc(IdleFunc);
 
 	static ShaderInfo shader_info[] = {
 		{ GL_VERTEX_SHADER, "../shader/test.vert", 0 },
@@ -85,17 +93,28 @@ void MainApp::Init(int argc, char** argv)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 
 	glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 }
 
-void MainApp::Render(void)
+void MainApp::RenderFunc(void)
 {
-	GL_Demo_Base::Render();
+	FrameCount++;
+
 	glBindVertexArray(VaoId);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	std::cout << "aaaaaaaaaaaaaa"<< std::endl;
 	glutSwapBuffers();
+}
+
+void MainApp::ResizeViewportFunc(int width, int hight)
+{
+	glViewport(100, 100, width, hight);
+}
+
+void MainApp::IdleFunc()
+{
+	glutPostRedisplay();
 }
 
 
