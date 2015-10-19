@@ -45,8 +45,10 @@ public:
 void GL_Demo_Base::Init(int argc, char** argv)
 {
 	InitWindow(argc, argv);
-
+	glutInitWindowSize(WIDTH, HIGHT);
+	glutInitWindowPosition(0, 0);
 	WindowHandle = glutCreateWindow("OpenGL_Demo");
+
 
 	if (WindowHandle < 1)
 	{
@@ -80,7 +82,7 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
 	glutTimerFunc(0, TimerFunc, 0);
-	glutCloseFunc(CleanUpFunc);
+//	glutCloseFunc(CleanUpFunc);
 }
 
 void GL_Demo_Base::TimerFunc(int value)
@@ -99,16 +101,6 @@ void GL_Demo_Base::TimerFunc(int value)
 
 	FrameCount = 0;
 	glutTimerFunc(250, TimerFunc, 1);
-}
-
-void GL_Demo_Base::CleanUp()
-{
-	s_app->CleanUpFunc();
-}
-
-void GL_Demo_Base::Timer(int value)
-{
-	s_app->TimerFunc(value);
 }
 
 #endif //_DEMO_BASE_H_

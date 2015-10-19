@@ -13,8 +13,8 @@ GLuint
 	PositionBufferId,
 	ColorBufferId;
 
-GLint render_model_matrix_loc;
-GLint render_projection_matrix_loc;
+//GLint render_model_matrix_loc;
+//GLint render_projection_matrix_loc;
 
 float positionData[] = {
 	-0.8f, -0.8f, 0.0f,
@@ -39,12 +39,15 @@ public:
 	~MainApp(){};
 	void Init(int argc, char** argv);
 
+	void ResizeWindow(int width, int hight);
+
 	static MainApp* p_mApp;
 }app;
 
 void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
+
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);
@@ -59,7 +62,7 @@ void MainApp::Init(int argc, char** argv)
 	ProgramId = LoadShader(shader_info);
 
 	glBindAttribLocation(ProgramId, 0, "vert_pos");
-	glBindAttribLocation(ProgramId, 0, "vert_color");
+	glBindAttribLocation(ProgramId, 1, "vert_color");
 	
 	LinkShader(ProgramId, shader_info);
 
@@ -67,8 +70,8 @@ void MainApp::Init(int argc, char** argv)
 
 
 	// "model_matrix" is actually an array of 4 matrices
-	render_model_matrix_loc = glGetUniformLocation(ProgramId, "model_matrix");
-	render_projection_matrix_loc = glGetUniformLocation(ProgramId, "projection_matrix");
+//	render_model_matrix_loc = glGetUniformLocation(ProgramId, "model_matrix");
+//	render_projection_matrix_loc = glGetUniformLocation(ProgramId, "projection_matrix");
 
 	GLuint vboHandles[2];
 	glGenBuffers(2, vboHandles);
@@ -94,7 +97,7 @@ void MainApp::Init(int argc, char** argv)
 
 	glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 }
 
 void MainApp::RenderFunc(void)
@@ -109,12 +112,17 @@ void MainApp::RenderFunc(void)
 
 void MainApp::ResizeViewportFunc(int width, int hight)
 {
-	glViewport(100, 100, width, hight);
+	glViewport(WIDTH/20, HIGHT/20, WIDTH, HIGHT);
 }
 
 void MainApp::IdleFunc()
 {
 	glutPostRedisplay();
+}
+
+void MainApp::ResizeWindow(int width, int hight)
+{
+	app.ResizeViewportFunc(width, hight);
 }
 
 
