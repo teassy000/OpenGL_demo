@@ -1,11 +1,11 @@
 #version 400
 
 in vec3 vert_pos;
-in vec4 vert_color;
+in vec3 vert_color;
 
 uniform mat4 RotationMtrx;
 
-out vec4 ex_color;
+out vec3 ex_color;
 
 void main()
 {

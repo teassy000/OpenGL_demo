@@ -25,7 +25,6 @@ float colorData[] = {
 };
 
 
-
 class MainApp : public GL_Demo_Base{
 protected:
 	static void ResizeViewportFunc(int width, int hight);
