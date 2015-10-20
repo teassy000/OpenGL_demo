@@ -13,9 +13,6 @@ GLuint
 	PositionBufferId,
 	ColorBufferId;
 
-//GLint render_model_matrix_loc;
-//GLint render_projection_matrix_loc;
-
 float positionData[] = {
 	-0.8f, -0.8f, 0.0f,
 	0.8f, -0.8f, 0.0f,
@@ -68,11 +65,6 @@ void MainApp::Init(int argc, char** argv)
 
 	glUseProgram(ProgramId);
 
-
-	// "model_matrix" is actually an array of 4 matrices
-//	render_model_matrix_loc = glGetUniformLocation(ProgramId, "model_matrix");
-//	render_projection_matrix_loc = glGetUniformLocation(ProgramId, "projection_matrix");
-
 	GLuint vboHandles[2];
 	glGenBuffers(2, vboHandles);
 	PositionBufferId = vboHandles[0];
@@ -104,6 +96,20 @@ void MainApp::RenderFunc(void)
 {
 	FrameCount++;
 
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	// use uniform value to control rotation of triangle.
+	float t = float(GetTickCount() & 0x1FFF) / float(0x1FFF);
+	static const vmath::vec3 Z(0.0f, 0.0f, 1.0f);
+	vmath::mat4 rotationMatrix = vmath::rotate(t*360.0f, Z);
+
+	GLuint location = glGetUniformLocation(ProgramId, "RotationMtrx");
+
+	if (location >= 0)
+	{
+		glUniformMatrix4fv(location, 1, GL_FALSE, &rotationMatrix[0][0]);
+	}
+
 	glBindVertexArray(VaoId);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -112,7 +118,7 @@ void MainApp::RenderFunc(void)
 
 void MainApp::ResizeViewportFunc(int width, int hight)
 {
-	glViewport(WIDTH/20, HIGHT/20, WIDTH, HIGHT);
+	glViewport(0, 0, WIDTH, HIGHT);
 }
 
 void MainApp::IdleFunc()

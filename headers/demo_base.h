@@ -82,7 +82,6 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
 	glutTimerFunc(0, TimerFunc, 0);
-//	glutCloseFunc(CleanUpFunc);
 }
 
 void GL_Demo_Base::TimerFunc(int value)
