@@ -81,7 +81,7 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
-	glutTimerFunc(0, TimerFunc, 0);
+	glutTimerFunc(20, TimerFunc, 0);
 }
 
 void GL_Demo_Base::TimerFunc(int value)
@@ -89,7 +89,7 @@ void GL_Demo_Base::TimerFunc(int value)
 	if (0 != value)
 	{
 		std::ostringstream oss;
-		oss << "GL_Demo" << FrameCount * 4 << " : " << " Frames Per Second @ "
+		oss << "GL_Demo" << " : " << FrameCount << " Frames Per Second @ "
 			<< WIDTH << " x " << HIGHT << std::endl;
 
 		std::string str = oss.str();
@@ -99,7 +99,7 @@ void GL_Demo_Base::TimerFunc(int value)
 	}
 
 	FrameCount = 0;
-	glutTimerFunc(250, TimerFunc, 1);
+	glutTimerFunc(20, TimerFunc, 10);
 }
 
 #endif //_DEMO_BASE_H_

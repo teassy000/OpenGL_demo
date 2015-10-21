@@ -1,6 +1,7 @@
 #include "demo_base.h"
 #include "LoadShaders.h"
-#include "vmath.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 #define WINDOW_TITLE_PREFIX "First_Runnable_Demo"
 
@@ -99,8 +100,8 @@ void MainApp::RenderFunc(void)
 
 	// use uniform value to control rotation of triangle.
 	float t = float(GetTickCount() & 0x1FFF) / float(0x1FFF);
-	static const vmath::vec3 Z(0.0f, 0.0f, 1.0f);
-	vmath::mat4 rotationMatrix = vmath::rotate(t*360.0f, Z);
+	static const glm::vec3 Z(0.0f, 0.0f, 1.0f);
+	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), t, Z);
 
 	GLuint location = glGetUniformLocation(ProgramId, "RotationMtrx");
 

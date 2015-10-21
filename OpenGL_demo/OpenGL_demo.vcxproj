@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\OpenGL\ogl_application\OpenGL_demo\headers;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\OpenGL\ogl_application\OpenGL_demo\libs\GL;D:\OpenGL\ogl_application\OpenGL_demo\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\OpenGL\ogl_application\OpenGL_demo\libs;D:\OpenGL\ogl_application\OpenGL_demo\headers;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\OpenGL\ogl_application\OpenGL_demo\libs\glm;D:\OpenGL\ogl_application\OpenGL_demo\libs\GL;D:\OpenGL\ogl_application\OpenGL_demo\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
