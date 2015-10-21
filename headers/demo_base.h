@@ -11,7 +11,6 @@
 
 #include "GL/glew.h"
 #include "freeglut.h"
-#include "vmath.h"
 
 static const int WIDTH = 1024;
 static const int HIGHT = 720;
