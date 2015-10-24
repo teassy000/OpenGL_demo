@@ -83,10 +83,12 @@
   <ItemGroup>
     <ClInclude Include="..\headers\demo_base.h" />
     <ClInclude Include="..\headers\LoadShaders.h" />
+    <ClInclude Include="..\headers\ply_file.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\LoadShaders.cpp" />
     <ClCompile Include="Src\MainApp.cpp" />
+    <ClCompile Include="Src\ply_file.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
