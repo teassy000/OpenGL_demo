@@ -2,6 +2,7 @@
 #include "LoadShaders.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "ply_file.h"
 
 #define WINDOW_TITLE_PREFIX "First_Runnable_Demo"
 
@@ -45,6 +46,9 @@ void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
 
+
+	Model_PLY* model = new Model_PLY;
+	model->Load("../model/bunny_res4.ply");
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);

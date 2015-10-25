@@ -20,18 +20,21 @@ class Model_PLY {
 public:
 	Model_PLY();
 	
-	GLuint Load(GLchar* filename);
+	GLuint	Load(GLchar* filename);
 	ply_Info* getInfo();
 
-	GLvoid calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & norm);
+	GLvoid	calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & norm);
 
 private:
-	GLuint numConnectedTriangles;
-	GLuint numConnectedQuads;
-	GLuint numConnectedPoints;
-	GLuint numFaces;
+	GLuint	numConnectedTriangles;
+	GLuint	numConnectedQuads;
+	GLuint	numConnectedPoints;
+	GLuint	numFaces;
 
-	float* vertexBuffer;
+	float*	vertexBuffer;
+	float*	faceTriangles;
+	float*	faceQuads;
+	float*	normals;
 };
 
 #endif
