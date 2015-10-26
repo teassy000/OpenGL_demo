@@ -25,16 +25,16 @@ public:
 
 	GLvoid	calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & norm);
 
-private:
+// need a interface to get these value
 	GLuint	numConnectedTriangles;
-	GLuint	numConnectedQuads;
 	GLuint	numConnectedPoints;
 	GLuint	numFaces;
 
 	float*	vertexBuffer;
 	float*	faceTriangles;
-	float*	faceQuads;
 	float*	normals;
+
+	GLuint* indices;
 };
 
 #endif

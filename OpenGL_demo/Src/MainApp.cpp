@@ -42,13 +42,23 @@ public:
 	static MainApp* p_mApp;
 }app;
 
+static Model_PLY* model = new Model_PLY;
+
 void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
 
-
-	Model_PLY* model = new Model_PLY;
 	model->Load("../model/bunny_res4.ply");
+	for (int i = 0; i < 5; ++i)
+	{
+		std::cout << model->indices[3*i] << " "
+			<< model->indices[3*i + 1] << " "
+			<< model->indices[3*i + 2] << " " << std::endl;
+
+		std::cout << model->vertexBuffer[3 * i] << " "
+			<< model->vertexBuffer[3 * i + 1] << " "
+			<< model->vertexBuffer[3 * i + 2] << " " << std::endl;
+	}
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);
@@ -102,7 +112,8 @@ void MainApp::RenderFunc(void)
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// use uniform value to control rotation of triangle.
+
+
 	float t = float(GetTickCount() & 0x1FFF) / float(0x1FFF);
 	static const glm::vec3 Z(0.0f, 0.0f, 1.0f);
 	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), 30.0f, Z);
