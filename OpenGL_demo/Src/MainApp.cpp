@@ -49,16 +49,12 @@ void MainApp::Init(int argc, char** argv)
 	GL_Demo_Base::Init(argc, argv);
 
 	model->Load("../model/bunny_res4.ply");
-	for (int i = 0; i < 5; ++i)
-	{
-		std::cout << model->indices[3*i] << " "
-			<< model->indices[3*i + 1] << " "
-			<< model->indices[3*i + 2] << " " << std::endl;
 
-		std::cout << model->vertexBuffer[3 * i] << " "
-			<< model->vertexBuffer[3 * i + 1] << " "
-			<< model->vertexBuffer[3 * i + 2] << " " << std::endl;
-	}
+	// test first and end of value.
+	std::cout << model->indices[0] << std::endl;
+	std::cout << model->vertexBuffer[0] << std::endl;
+	std::cout << model->indices[3 * (model->numFaces-1) + 2]  << std::endl;
+	std::cout << model->vertexBuffer[3 * (model->numConnectedPoints - 1) + 2] << std::endl;
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);

@@ -37,14 +37,17 @@ Planing
 	LoadShader has run time null pointer, need fix it(fixed).
 10/13/2015 ：
 
-	Implement some to test shader loading stream.
+	Implement some to test shader loading stream.(done)
 10/16/2015 :
 
 	- Needs to separate glLinkPragram out from LoadShader func so that we can use glBindAttribLocation(Done).
 
 
-	- A little confuse about base class, need to think about which interface is indispensable.
+	- A little confuse about base class, need to think about which interface is indispensable.(fixed)
 
-		- Found that Function Render in mApp is not called, needs fix(application appears white)!
+		- Found that Function Render in mApp is not called, needs fix(application appears white)!(fixed)
 
 
+10/27/2015
+
+	- I'm wondering which rendering method should I use! GL_TRIANGLE_TRIP / GL_TRIANGLES / GL_TRIANGLE_LIST.
