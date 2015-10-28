@@ -7,8 +7,7 @@ numConnectedPoints(0),
 numFaces(0),
 vertexBuffer(nullptr),
 faceTriangles(nullptr),
-normals(nullptr),
-indices(nullptr)
+normals(nullptr)
 {
 	
 }
@@ -66,7 +65,6 @@ GLuint Model_PLY::Load(GLchar* filename)
 			int temp = 0;
 			int normalIndex = 0;
 			int triangleIndex = 0;
-			int indicesIndex = 0;
 			char buffer[1000]; // every time gets 1000 buffer.
 
 			fgets(buffer, 300, file); //ply
@@ -102,7 +100,6 @@ GLuint Model_PLY::Load(GLchar* filename)
 			}
 			//---------------------
 
-			indices = (GLuint*)malloc(3 * numFaces * sizeof(GLuint));
 
 			// Read vertexes
 			i = 0;
@@ -126,13 +123,6 @@ GLuint Model_PLY::Load(GLchar* filename)
 					buffer[0] = ' ';
 					sscanf_s(buffer, "%i%i%i", &vert0, &vert1, &vert2);
 
-					indices[indicesIndex] = vert0;
-					indices[indicesIndex + 1] = vert1;
-					indices[indicesIndex + 2] = vert2;
-
-					indicesIndex += 3;
-
-
 					/* here to test values in ply file.
 					//---------------------------------------------
 					if (vert1 == 0)
@@ -150,35 +140,32 @@ GLuint Model_PLY::Load(GLchar* filename)
 					//----------------------------------------------
 					*/
 
-					// not going to use normal in program.
-					// use triangle indices insteaded.
+
 					// set values to faceTriangles.
-// 					faceTriangles[triangleIndex] = vertexBuffer[3 * vert1];
-// 					faceTriangles[triangleIndex + 1] = vertexBuffer[3 * vert1 + 1];
-// 					faceTriangles[triangleIndex + 2] = vertexBuffer[3 * vert1 + 2];
-// 					faceTriangles[triangleIndex + 3] = vertexBuffer[3 * vert2];
-// 					faceTriangles[triangleIndex + 4] = vertexBuffer[3 * vert2 + 1];
-// 					faceTriangles[triangleIndex + 5] = vertexBuffer[3 * vert2 + 2];
-// 					faceTriangles[triangleIndex + 6] = vertexBuffer[3 * vert3];
-// 					faceTriangles[triangleIndex + 7] = vertexBuffer[3 * vert3 + 1];
-// 					faceTriangles[triangleIndex + 8] = vertexBuffer[3 * vert3 + 2];
-// 
-// 					// going to calculate normal.
-// 					vec3 point1(vertexBuffer[3 * vert1], vertexBuffer[3 * vert1 + 1], vertexBuffer[3 * vert1 + 2]);
-// 					vec3 point2(vertexBuffer[3 * vert2], vertexBuffer[3 * vert2 + 1], vertexBuffer[3 * vert2 + 2]);
-// 					vec3 point3(vertexBuffer[3 * vert3], vertexBuffer[3 * vert3 + 1], vertexBuffer[3 * vert3 + 2]);
-// 
-// 					vec3 norm(0.0f);
-// 					this->calculateNormal(point1, point2, point3, norm);
-// 
-// 					for (int offset = 0; offset < 9; ++offset)
-// 					{
-// 						normals[normalIndex + offset] = norm[offset % 3]; //set normal for each point.
-// 					}
-// 
-// 					normalIndex += 9; //set offset to next triangle. 
+ 					faceTriangles[triangleIndex] = vertexBuffer[3 * vert0];
+ 					faceTriangles[triangleIndex + 1] = vertexBuffer[3 * vert0 + 1];
+					faceTriangles[triangleIndex + 2] = vertexBuffer[3 * vert0 + 2];
+ 					faceTriangles[triangleIndex + 3] = vertexBuffer[3 * vert1];
+					faceTriangles[triangleIndex + 4] = vertexBuffer[3 * vert1 + 1];
+					faceTriangles[triangleIndex + 5] = vertexBuffer[3 * vert1 + 2];
+ 					faceTriangles[triangleIndex + 6] = vertexBuffer[3 * vert2];
+					faceTriangles[triangleIndex + 7] = vertexBuffer[3 * vert2 + 1];
+					faceTriangles[triangleIndex + 8] = vertexBuffer[3 * vert2 + 2];
+ 
+ 					// going to calculate normal.
+					vec3 point0(vertexBuffer[3 * vert0], vertexBuffer[3 * vert0 + 1], vertexBuffer[3 * vert0 + 2]);
+					vec3 point1(vertexBuffer[3 * vert1], vertexBuffer[3 * vert1 + 1], vertexBuffer[3 * vert1 + 2]);
+					vec3 point2(vertexBuffer[3 * vert2], vertexBuffer[3 * vert2 + 1], vertexBuffer[3 * vert2 + 2]);
+ 
+ 					vec3 norm(0.0f);
+ 					this->calculateNormal(point0, point1, point2, norm);
 
-
+ 					for (int offset = 0; offset < 9; ++offset)
+ 					{
+ 						normals[normalIndex + offset] = norm[offset % 3]; //set normal for each point.
+ 					}
+ 
+ 					normalIndex += 9; //set offset to next triangle. 
 
 					triangleIndex += 9; //set offset to next triangle.
 					numConnectedTriangles += 3; // three points per triangle
@@ -187,8 +174,6 @@ GLuint Model_PLY::Load(GLchar* filename)
 			}
 
 			fclose(file);
-
-
 
 		}
 		else

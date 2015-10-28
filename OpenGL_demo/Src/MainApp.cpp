@@ -13,7 +13,7 @@ GLuint
 	VaoId = 0,
 	VboId,
 	PositionBufferId,
-	ColorBufferId;
+	NormalBufferId;
 
 float positionData[] = {
 	-0.8f, -0.8f, 0.0f,
@@ -50,12 +50,6 @@ void MainApp::Init(int argc, char** argv)
 
 	model->Load("../model/bunny_res4.ply");
 
-	// test first and end of value.
-	std::cout << model->indices[0] << std::endl;
-	std::cout << model->vertexBuffer[0] << std::endl;
-	std::cout << model->indices[3 * (model->numFaces-1) + 2]  << std::endl;
-	std::cout << model->vertexBuffer[3 * (model->numConnectedPoints - 1) + 2] << std::endl;
-
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);
 	glutIdleFunc(IdleFunc);
@@ -69,7 +63,7 @@ void MainApp::Init(int argc, char** argv)
 	ProgramId = LoadShader(shader_info);
 
 	glBindAttribLocation(ProgramId, 0, "vert_pos");
-	glBindAttribLocation(ProgramId, 1, "vert_color");
+	glBindAttribLocation(ProgramId, 1, "vert_norm");
 	
 	LinkShader(ProgramId, shader_info);
 
@@ -78,13 +72,13 @@ void MainApp::Init(int argc, char** argv)
 	GLuint vboHandles[2];
 	glGenBuffers(2, vboHandles);
 	PositionBufferId = vboHandles[0];
-	ColorBufferId = vboHandles[1];
+	NormalBufferId = vboHandles[1];
 
 	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), positionData, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * model->numConnectedTriangles, model->vertexBuffer, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), colorData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, NormalBufferId);
+	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * model->numConnectedTriangles, model->normals, GL_STATIC_DRAW);
 
 	// Create a set of vertex array object.
 	
@@ -95,11 +89,11 @@ void MainApp::Init(int argc, char** argv)
 	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 0, (GLubyte*)NULL);
 
-	glBindBuffer(GL_ARRAY_BUFFER, ColorBufferId);
+	glBindBuffer(GL_ARRAY_BUFFER, NormalBufferId);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (GLubyte*)NULL);
 }
 
 void MainApp::RenderFunc(void)
@@ -108,21 +102,18 @@ void MainApp::RenderFunc(void)
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, model->faceTriangles);
+	glNormalPointer(GL_FLOAT, 0, model->normals);
 
+	//glUniformMatrix4fv();
 
-	float t = float(GetTickCount() & 0x1FFF) / float(0x1FFF);
-	static const glm::vec3 Z(0.0f, 0.0f, 1.0f);
-	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), 30.0f, Z);
-
-	GLuint location = glGetUniformLocation(ProgramId, "RotationMtrx");
-
-	if (location >= 0)
-	{
-		glUniformMatrix4fv(location, 1, GL_FALSE, &rotationMatrix[0][0]);
-	}
 
 	glBindVertexArray(VaoId);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, model->numConnectedTriangles);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 
 	glutSwapBuffers();
 }

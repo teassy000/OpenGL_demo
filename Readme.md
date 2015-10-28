@@ -50,4 +50,10 @@ Planing
 
 10/27/2015
 
-	- I'm wondering which rendering method should I use! GL_TRIANGLE_TRIP / GL_TRIANGLES / GL_TRIANGLE_LIST.
+	- I'm wondering which rendering method should I use! GL_TRIANGLE_STRIP / GL_TRIANGLES / GL_TRIANGLE_LIST(use GL_TRIANGLES).
+
+10/28/2015
+
+	- Seems like the shader got vertex values . But the model is projected so far from the camera. Normal is too small 
+
+	so that I can not see any different of those three valuse. Needs projection, rotation and normal matrix.

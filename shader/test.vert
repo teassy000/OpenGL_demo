@@ -1,14 +1,13 @@
 #version 400
 
 in vec3 vert_pos;
-in vec3 vert_color;
+in vec3 vert_norm;
 
-uniform mat4 RotationMtrx;
 
 out vec3 ex_color;
 
 void main()
 {
-   ex_color = vert_color;
-   gl_Position = RotationMtrx * vec4(vert_pos, 1.0f);
+   ex_color = normalize(vec3(vert_norm.x + 0.5, vert_norm.y + 0.5, vert_norm.z + 0.5));
+   gl_Position = vec4(vert_pos, 1.0f);
 }
