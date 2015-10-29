@@ -26,6 +26,21 @@ float colorData[] = {
 	0.0f, 0.0f, 1.0f
 };
 
+GLfloat Scale = 5.0f;
+
+glm::mat4 scaleMtrx = glm::mat4(Scale, 0.0f, 0.0f, 0.0f,
+								0.0f, Scale, 0.0f, 0.0f,
+								0.0f, 0.0f, Scale, 0.0f,
+								0.0f, 0.0f, 0.0f, 1.0f
+								);
+
+
+glm::mat4 ratateMtrx = glm::mat4(0.0f, 0.0f, -1.0f, 0.0f,
+								0.0f, 1.0f, 0.0f, 0.0f,
+								1.0f, 0.0f, 0.0f, 0.0f,
+								0.0f, 0.0f, 0.0f, 1.0f
+								);
+
 
 class MainApp : public GL_Demo_Base{
 protected:
@@ -75,10 +90,10 @@ void MainApp::Init(int argc, char** argv)
 	NormalBufferId = vboHandles[1];
 
 	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
-	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * model->numConnectedTriangles, model->vertexBuffer, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * (model->numFaces), model->faceTriangles, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, NormalBufferId);
-	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * model->numConnectedTriangles, model->normals, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * (model->numFaces), model->normals, GL_STATIC_DRAW);
 
 	// Create a set of vertex array object.
 	
@@ -92,28 +107,36 @@ void MainApp::Init(int argc, char** argv)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 0, (GLubyte*)NULL);
 
 	glBindBuffer(GL_ARRAY_BUFFER, NormalBufferId);
-
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (GLubyte*)NULL);
 }
 
 void MainApp::RenderFunc(void)
 {
 	FrameCount++;
+	float t = float(GetTickCount() & 0x1FFF) / float(0x1FFF);
+	float cos_t = glm::cos(t * 9.0f);
+	float sin_t = glm::sin(t * 9.0f);
+	
+	ratateMtrx = glm::mat4(cos_t, 0.0f,-1.0f * sin_t, 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+							sin_t, 0.0f, cos_t, 0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f
+		);
 
-	glClear(GL_COLOR_BUFFER_BIT);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, model->faceTriangles);
-	glNormalPointer(GL_FLOAT, 0, model->normals);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//glUniformMatrix4fv();
 
+	GLuint Scale_mtrx_loc = glGetUniformLocation(ProgramId, "Scale_Mtrx");
+	GLuint Rotate_mtrx_loc = glGetUniformLocation(ProgramId, "Rotate_Mtrx");
+
+	glUniformMatrix4fv(Scale_mtrx_loc, 1, GL_FALSE, &scaleMtrx[0][0]);
+	glUniformMatrix4fv(Rotate_mtrx_loc, 1, GL_FALSE, &ratateMtrx[0][0]);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glBindVertexArray(VaoId);
-	glDrawArrays(GL_TRIANGLES, 0, model->numConnectedTriangles);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
+	glDrawArrays(GL_TRIANGLES, 0, model->numFaces * 3);
 
 	glutSwapBuffers();
 }
