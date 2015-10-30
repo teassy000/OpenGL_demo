@@ -51,3 +51,8 @@ Implement some to test shader loading stream.(done)
 10/28/2015
 
 - Seems like the shader got vertex values . But the model is projected so far from the camera. Normal is too small so that I can not see any different of those three valuse. Needs projection, rotation and normal matrix.
+
+10/30/2015
+
+- should figure out what's the order of rotate/tranlate/scale.
+- Normal still have some issue.
