@@ -28,18 +28,27 @@ float colorData[] = {
 
 GLfloat Scale = 5.0f;
 
-glm::mat4 scaleMtrx = glm::mat4(Scale, 0.0f, 0.0f, 0.0f,
-								0.0f, Scale, 0.0f, 0.0f,
-								0.0f, 0.0f, Scale, 0.0f,
-								0.0f, 0.0f, 0.0f, 1.0f
-								);
+glm::mat4 scaleMtrx = glm::mat4(
+	Scale, 0.0f, 0.0f, 0.0f,
+	0.0f, Scale, 0.0f, 0.0f,
+	0.0f, 0.0f, Scale, 0.0f,
+	0.0f, 0.0f, 0.0f, 1.0f
+	);
+
+glm::mat4 transMtrx = glm::mat4(
+	1.0f, 0.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f, 0.0f,
+	0.0f, 0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 0.0f, 1.0f
+	);
 
 
-glm::mat4 ratateMtrx = glm::mat4(0.0f, 0.0f, -1.0f, 0.0f,
-								0.0f, 1.0f, 0.0f, 0.0f,
-								1.0f, 0.0f, 0.0f, 0.0f,
-								0.0f, 0.0f, 0.0f, 1.0f
-								);
+glm::mat4 rotateMtrx = glm::mat4(
+	0.0f, 0.0f, -1.0f, 0.0f,
+	0.0f, 1.0f, 0.0f, 0.0f,
+	1.0f, 0.0f, 0.0f, 0.0f,
+	0.0f, 0.0f, 0.0f, 1.0f
+	);
 
 
 class MainApp : public GL_Demo_Base{
@@ -63,7 +72,7 @@ void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
 
-	model->Load("../model/bunny_res4.ply");
+	model->Load("../model/bunny.ply");
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);
@@ -117,7 +126,7 @@ void MainApp::RenderFunc(void)
 	float cos_t = glm::cos(t * 9.0f);
 	float sin_t = glm::sin(t * 9.0f);
 	
-	ratateMtrx = glm::mat4(cos_t, 0.0f,-1.0f * sin_t, 0.0f,
+	rotateMtrx = glm::mat4(cos_t, 0.0f,-1.0f * sin_t, 0.0f,
 							0.0f, 1.0f, 0.0f, 0.0f,
 							sin_t, 0.0f, cos_t, 0.0f,
 							0.0f, 0.0f, 0.0f, 1.0f
@@ -126,17 +135,21 @@ void MainApp::RenderFunc(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+	GLuint Trans_mtrx_loc = glGetUniformLocation(ProgramId, "Trans_Mtrx");
 	GLuint Scale_mtrx_loc = glGetUniformLocation(ProgramId, "Scale_Mtrx");
 	GLuint Rotate_mtrx_loc = glGetUniformLocation(ProgramId, "Rotate_Mtrx");
 
 	glUniformMatrix4fv(Scale_mtrx_loc, 1, GL_FALSE, &scaleMtrx[0][0]);
-	glUniformMatrix4fv(Rotate_mtrx_loc, 1, GL_FALSE, &ratateMtrx[0][0]);
+	glUniformMatrix4fv(Rotate_mtrx_loc, 1, GL_FALSE, &rotateMtrx[0][0]);
+	glUniformMatrix4fv(Trans_mtrx_loc, 1, GL_FALSE, &transMtrx[0][0]);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	// found that there are some issue when calculate normal.
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	glBindVertexArray(VaoId);
-	glDrawArrays(GL_TRIANGLES, 0, model->numFaces * 3);
+	glDrawArrays(GL_TRIANGLES, 0, model->numFaces * 9);
 
 	glutSwapBuffers();
 }
