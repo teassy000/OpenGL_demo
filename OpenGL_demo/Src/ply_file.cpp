@@ -7,7 +7,8 @@ numConnectedPoints(0),
 numFaces(0),
 vertexBuffer(nullptr),
 faceTriangles(nullptr),
-normals(nullptr)
+normals(nullptr),
+indices(nullptr)
 {
 	
 }
@@ -19,7 +20,7 @@ void Model_PLY::calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & no
 
 	// calculate the vector that a triangle any two border.
 	va = point1 - point2;
-	vb = point1 - point3;
+	vb = point2 - point3;
 
 	//cross product to compute the direction of normal.
 	norm = glm::cross(va, vb);
@@ -93,6 +94,8 @@ GLuint Model_PLY::Load(GLchar* filename)
 			sscanf_s(buffer, "%i", &this->numFaces); //read integer value for num of faces.
 			std::cout << "Number of faces is : " << numFaces << std::endl;
 
+
+			indices = (GLuint*)malloc(sizeof(GLuint*) * 3 * numFaces);
 			// go to end_header
 			while (strncmp(("end_header"), buffer, strlen("end_header")) != 0)
 			{
@@ -122,6 +125,10 @@ GLuint Model_PLY::Load(GLchar* filename)
 					int vert0 = 0, vert1 = 0, vert2 = 0;
 					buffer[0] = ' ';
 					sscanf_s(buffer, "%i%i%i", &vert0, &vert1, &vert2);
+
+					indices[3 * iter] = vert0;
+					indices[3 * iter + 1] = vert1;
+					indices[3 * iter + 2] = vert2;
 
 					/* here to test values in ply file.
 					//---------------------------------------------
