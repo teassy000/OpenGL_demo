@@ -7,8 +7,7 @@ numConnectedPoints(0),
 numFaces(0),
 vertexBuffer(nullptr),
 faceTriangles(nullptr),
-normals(nullptr),
-indices(nullptr)
+normals(nullptr)
 {
 	
 }
@@ -95,7 +94,6 @@ GLuint Model_PLY::Load(GLchar* filename)
 			std::cout << "Number of faces is : " << numFaces << std::endl;
 
 
-			indices = (GLuint*)malloc(sizeof(GLuint*) * 3 * numFaces);
 			// go to end_header
 			while (strncmp(("end_header"), buffer, strlen("end_header")) != 0)
 			{
@@ -126,9 +124,6 @@ GLuint Model_PLY::Load(GLchar* filename)
 					buffer[0] = ' ';
 					sscanf_s(buffer, "%i%i%i", &vert0, &vert1, &vert2);
 
-					indices[3 * iter] = vert0;
-					indices[3 * iter + 1] = vert1;
-					indices[3 * iter + 2] = vert2;
 
 					/* here to test values in ply file.
 					//---------------------------------------------

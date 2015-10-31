@@ -34,8 +34,6 @@ public:
 	float*	faceTriangles;
 	float*	normals;
 
-	GLuint* indices;
-
 };
 
 #endif

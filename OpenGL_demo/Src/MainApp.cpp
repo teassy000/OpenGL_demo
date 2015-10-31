@@ -62,8 +62,19 @@ public:
 	void Init(int argc, char** argv);
 
 	void ResizeWindow(int width, int hight);
+	void CalculateMVP();
 
 	static MainApp* p_mApp;
+	glm::mat4 MVP;
+
+private:
+
+	void getProjectionMtrx();
+	void getViewMtrx();
+
+	glm::mat4 ProjectionMtrx;
+	glm::mat4 ViewMtrx;
+	glm::mat4 ModelMtrx = glm::mat4(1.0f);
 }app;
 
 static Model_PLY* model = new Model_PLY;
@@ -72,7 +83,7 @@ void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
 
-	model->Load("../model/bunny.ply");
+	model->Load("../model/bunny_res2.ply");
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);
@@ -117,14 +128,18 @@ void MainApp::Init(int argc, char** argv)
 
 	glBindBuffer(GL_ARRAY_BUFFER, NormalBufferId);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (GLubyte*)NULL);
+
+	getProjectionMtrx();
+	getViewMtrx();
+	CalculateMVP();
 }
 
 void MainApp::RenderFunc(void)
 {
 	FrameCount++;
-	float t = float(GetTickCount() & 0x1FFF) / float(0x1FFF);
-	float cos_t = glm::cos(t * 9.0f);
-	float sin_t = glm::sin(t * 9.0f);
+	double t = double(GetTickCount() & 0x1FFF) / double(0x1FFF);
+	double cos_t = glm::cos(t * 3.6f * 2.0f);
+	double sin_t = glm::sin(t * 3.6f * 2.0f);
 	
 	rotateMtrx = glm::mat4(cos_t, 0.0f,-1.0f * sin_t, 0.0f,
 							0.0f, 1.0f, 0.0f, 0.0f,
@@ -138,18 +153,20 @@ void MainApp::RenderFunc(void)
 	GLuint Trans_mtrx_loc = glGetUniformLocation(ProgramId, "Trans_Mtrx");
 	GLuint Scale_mtrx_loc = glGetUniformLocation(ProgramId, "Scale_Mtrx");
 	GLuint Rotate_mtrx_loc = glGetUniformLocation(ProgramId, "Rotate_Mtrx");
+	GLuint MVP_loc = glGetUniformLocation(ProgramId, "MVP");
 
 	glUniformMatrix4fv(Scale_mtrx_loc, 1, GL_FALSE, &scaleMtrx[0][0]);
 	glUniformMatrix4fv(Rotate_mtrx_loc, 1, GL_FALSE, &rotateMtrx[0][0]);
 	glUniformMatrix4fv(Trans_mtrx_loc, 1, GL_FALSE, &transMtrx[0][0]);
+	glUniformMatrix4fv(MVP_loc, 1, GL_FALSE, &(app.MVP[0][0]));
 
-
-	// found that there are some issue when calculate normal.
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	glEnable(GL_DEPTH_TEST);
+	glCullFace(GL_FRONT);
 
 	glBindVertexArray(VaoId);
 	glDrawArrays(GL_TRIANGLES, 0, model->numFaces * 9);
+
 
 	glutSwapBuffers();
 }
@@ -168,6 +185,25 @@ void MainApp::ResizeWindow(int width, int hight)
 {
 	app.ResizeViewportFunc(width, hight);
 }
+
+void MainApp::getProjectionMtrx()
+{
+	ProjectionMtrx = glm::perspective(45.0f, 4.0f / 3.0f, 1.0f, 20.0f);
+}
+
+void MainApp::getViewMtrx()
+{
+	ViewMtrx = transMtrx * rotateMtrx;
+}
+
+void MainApp::CalculateMVP()
+{
+	//MVP = ProjectionMtrx * ViewMtrx * ModelMtrx;
+	// still got some problem on ProjectionMtrx, needs fix temorrow.
+	MVP = ViewMtrx * ModelMtrx;
+}
+
+
 
 
 int main(int argc, char** argv)

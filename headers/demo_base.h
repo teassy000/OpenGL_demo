@@ -63,7 +63,7 @@ void GL_Demo_Base::Init(int argc, char** argv)
 
 	std::cout << "INFO: OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.3f, 0.3f, 0.3f, 0.0f);
 
 }
 
@@ -80,7 +80,7 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
-	glutTimerFunc(20, TimerFunc, 0);
+	glutTimerFunc(35, TimerFunc, 1);
 }
 
 void GL_Demo_Base::TimerFunc(int value)
@@ -98,7 +98,7 @@ void GL_Demo_Base::TimerFunc(int value)
 	}
 
 	FrameCount = 0;
-	glutTimerFunc(20, TimerFunc, 10);
+	glutTimerFunc(35, TimerFunc, 1);
 }
 
 #endif //_DEMO_BASE_H_
