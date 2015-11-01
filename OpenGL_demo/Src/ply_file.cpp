@@ -125,24 +125,6 @@ GLuint Model_PLY::Load(GLchar* filename)
 					sscanf_s(buffer, "%i%i%i", &vert0, &vert1, &vert2);
 
 
-					/* here to test values in ply file.
-					//---------------------------------------------
-					if (vert1 == 0)
-					{
-						std::cout << "Current triangle: " << iter
-							<< " points are: " << vert1 << " "
-							<< vert2 << " "
-							<< vert3 << " " << std::ends;
-
-
-						std::cout << vertexBuffer[3 * vert1] << " "
-							<< vertexBuffer[3 * vert1 + 1] << " "
-							<< vertexBuffer[3 * vert1 + 2] << " " << std::endl;
-					}
-					//----------------------------------------------
-					*/
-
-
 					// set values to faceTriangles.
  					faceTriangles[triangleIndex] = vertexBuffer[3 * vert0];
  					faceTriangles[triangleIndex + 1] = vertexBuffer[3 * vert0 + 1];
