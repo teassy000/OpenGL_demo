@@ -80,7 +80,7 @@ void GL_Demo_Base::InitWindow(int argc, char** argv)
 
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
-	glutTimerFunc(35, TimerFunc, 1);
+	glutTimerFunc(10, TimerFunc, 1);
 }
 
 void GL_Demo_Base::TimerFunc(int value)
@@ -98,7 +98,7 @@ void GL_Demo_Base::TimerFunc(int value)
 	}
 
 	FrameCount = 0;
-	glutTimerFunc(35, TimerFunc, 1);
+	glutTimerFunc(10, TimerFunc, 1);
 }
 
 #endif //_DEMO_BASE_H_

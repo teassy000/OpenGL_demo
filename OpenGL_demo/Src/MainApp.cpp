@@ -46,6 +46,7 @@ private:
 	glm::mat4 transMtrx = glm::mat4(1.0f);
 	glm::mat4 scaleMtrx = glm::mat4(1.0f);
 	glm::mat4 rotateMtrx = glm::mat4(1.0f);
+	glm::mat4 lookAt_Mtrx = glm::mat4(1.0f);
 
 	GLuint t = 0;
 	GLuint slow_tag;
@@ -57,7 +58,7 @@ void MainApp::Init(int argc, char** argv)
 {
 	GL_Demo_Base::Init(argc, argv);
 
-	model->Load("../model/bunny_res2.ply");
+	model->Load("../model/bunny_res3.ply");
 
 	glutReshapeFunc(ResizeViewportFunc);
 	glutDisplayFunc(RenderFunc);
@@ -158,7 +159,9 @@ void MainApp::ResizeWindow(int width, int hight)
 
 void MainApp::getProjectionMtrx()
 {
-	glm::mat4 temp = glm::perspectiveRH(45.0f, 1024.0f / 720.0f, 0.0f, 60.0f);
+	//glm::mat4 temp = glm::ortho(0.0f, 1000.0f, 0.0f, 700.0f, 0.0f, 500.0f);
+
+	glm::mat4 temp = glm::perspectiveRH(130.0f, 1024.0f / 720.0f, 0.0f, 800.0f);
  	for (int i = 0; i < 4; ++i)
  	{
  		for (int j = 0; j < 4; ++j)
@@ -169,15 +172,17 @@ void MainApp::getProjectionMtrx()
  	}
  	ProjectionMtrx = temp;
 	//ProjectionMtrx = glm::transpose(temp);
-
+	ProjectionMtrx = glm::mat4(1.0f);
 }
 
 void MainApp::InitViewMtrx()
 {
 	glm::mat4 tempR, tempT, tempS;
 	rotateMtrx = glm::rotate(tempR, 90.0f, vec3(0.0f, 1.0f, 0.0f));
-	transMtrx = glm::translate(tempT, vec3(0.0f, -0.5f, 0.0f));
-	scaleMtrx = glm::scale(tempS, vec3(5.0f, 5.0f, 5.0f));
+	transMtrx = glm::translate(tempT, vec3(0.0f, 0.0f, -1.0f));
+	scaleMtrx = glm::scale(tempS, vec3(3.0f, 3.0f, 3.0f));
+
+	lookAt_Mtrx = glm::lookAtRH(vec3(0.0f, 0.0f, -1.0f), vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
 }
 
 void MainApp::getViewMtrx()
@@ -187,7 +192,7 @@ void MainApp::getViewMtrx()
 
 void MainApp::CalculateMVP()
 {
-	MVP = ViewMtrx /* ProjectionMtrx*//* ModelMtrx*/;
+	MVP = ProjectionMtrx * lookAt_Mtrx  * ViewMtrx;
 }
 
 void MainApp::updateRotate_Y()
