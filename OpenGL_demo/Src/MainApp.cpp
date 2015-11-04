@@ -159,30 +159,28 @@ void MainApp::ResizeWindow(int width, int hight)
 
 void MainApp::getProjectionMtrx()
 {
-	//glm::mat4 temp = glm::ortho(0.0f, 1000.0f, 0.0f, 700.0f, 0.0f, 500.0f);
+	glm::mat4 temp = glm::perspectiveLH(45.0f, 1024.0f/720.0f, 1.0f, 100.0f);
 
-	glm::mat4 temp = glm::perspectiveRH(130.0f, 1024.0f / 720.0f, 0.0f, 800.0f);
- 	for (int i = 0; i < 4; ++i)
- 	{
- 		for (int j = 0; j < 4; ++j)
- 		{
- 			std::cout << temp[i][j] << std::ends;
- 		}
- 		std::cout << std::endl;
- 	}
  	ProjectionMtrx = temp;
-	//ProjectionMtrx = glm::transpose(temp);
-	ProjectionMtrx = glm::mat4(1.0f);
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			std::cout << ProjectionMtrx[j][i] << std::ends;
+		}
+		std::cout << std::endl;
+	}
 }
 
 void MainApp::InitViewMtrx()
 {
 	glm::mat4 tempR, tempT, tempS;
 	rotateMtrx = glm::rotate(tempR, 90.0f, vec3(0.0f, 1.0f, 0.0f));
-	transMtrx = glm::translate(tempT, vec3(0.0f, 0.0f, -1.0f));
-	scaleMtrx = glm::scale(tempS, vec3(3.0f, 3.0f, 3.0f));
-
-	lookAt_Mtrx = glm::lookAtRH(vec3(0.0f, 0.0f, -1.0f), vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
+	transMtrx = glm::translate(tempT, vec3(0.0f, -2.0f, -5.0f));
+	scaleMtrx = glm::scale(tempS, vec3(20.0f));
+ 
+	lookAt_Mtrx = glm::lookAtLH(vec3(0.0f, 0.0f, 0.01f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 }
 
 void MainApp::getViewMtrx()
