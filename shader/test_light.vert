@@ -39,17 +39,24 @@ void main()
 	vec3 v = normalize( -eyeCoords.xyz);
 	vec3 r = reflect( -s, tnorm);
 	
-	vec3 ambient = normalize(light.La * material.Ka);
-  
+	vec3 ambient = light.La * material.Ka;
+  	ambient.x = max(ambient.x, 0.0f);
+	ambient.y = max(ambient.y, 0.0f);
+	ambient.z = max(ambient.z, 0.0f);
+	
 	float sDotN = max( dot(s, tnorm), 0.0f);
 
-	vec3 diffuse = normalize(light.Ld * material.Kd * sDotN);
+	vec3 diffuse = light.Ld * material.Kd * sDotN;
+	diffuse.x = max(diffuse.x, 0.0f);
+	diffuse.y = max(diffuse.y, 0.0f);
+	diffuse.z = max(diffuse.z, 0.0f);
+	
 	vec3 spec = vec3(0.0f);
 	if(sDotN > 0.0f) {
 		spec = light.Ls * material.Ks * pow( max( dot(r, v), 0.0f), material.shininess);
 	}
 
-	ex_color = diffuse;
+	ex_color = ambient + diffuse + spec;
 	
 	gl_Position =  MVP * vec4(vert_pos, 1.0f);
 }
