@@ -5,8 +5,6 @@ in vec3 vert_norm;
 
 struct LightInfo {
 	vec4	position;
-	vec4	color;
-
 	vec3	Ld;		
 	vec3	La;		
 	vec3	Ls;		
@@ -33,6 +31,7 @@ void main()
 {
 	
 	vec3 tnorm = normalize(vec3(ModelViewMtrx) * mat3(ModelMtrx) * vert_norm);
+
 	vec4 eyeCoords = ModelViewMtrx * mat4(1.0f) * vec4(vert_pos, 1.0f);
 
 	vec3 s = normalize( vec3( light.position - eyeCoords));
@@ -40,7 +39,7 @@ void main()
 	vec3 r = reflect( -s, tnorm);
 	
 	vec3 ambient = light.La * material.Ka;
-  	ambient.x = max(ambient.x, 0.0f);
+	ambient.x = max(ambient.x, 0.0f);
 	ambient.y = max(ambient.y, 0.0f);
 	ambient.z = max(ambient.z, 0.0f);
 	
@@ -50,7 +49,7 @@ void main()
 	diffuse.x = max(diffuse.x, 0.0f);
 	diffuse.y = max(diffuse.y, 0.0f);
 	diffuse.z = max(diffuse.z, 0.0f);
-	
+
 	vec3 spec = vec3(0.0f);
 	if(sDotN > 0.0f) {
 		spec = light.Ls * material.Ks * pow( max( dot(r, v), 0.0f), material.shininess);
