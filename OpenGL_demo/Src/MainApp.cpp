@@ -68,6 +68,7 @@ void MainApp::Init(int argc, char** argv)
 	glutDisplayFunc(RenderFunc);
 	glutIdleFunc(IdleFunc);
 
+
 	static ShaderInfo shader_info[] = {
 		{ GL_VERTEX_SHADER, "../shader/test_light.vert", 0 },
 		{ GL_FRAGMENT_SHADER, "../shader/test_light.frag", 0 },
@@ -88,7 +89,7 @@ void MainApp::Init(int argc, char** argv)
 	PositionBufferId = vboHandles[0];
 	NormalBufferId = vboHandles[1];
 	
-	model->Load("../model/bunny_res3.ply");
+	model->Load("../model/bunny.ply");
 
 	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
 	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * (model->numFaces), model->faceTriangles, GL_STATIC_DRAW);
@@ -138,8 +139,6 @@ void MainApp::RenderFunc(void)
 	// share light info to shader.
 	GLuint light_pos_loc = glGetUniformLocation(ProgramId, "light.position");
 	glUniform4fv(light_pos_loc, 1, &app.mLight.position[0]);
-	GLuint light_color_loc = glGetUniformLocation(ProgramId, "light.color");
-	glUniform4fv(light_color_loc, 1, &app.mLight.color[0]);
 	GLuint light_Ld_loc = glGetUniformLocation(ProgramId, "light.Ld");
 	glUniform3fv(light_Ld_loc, 1, &app.mLight.Ld[0]);
 	GLuint light_La_loc = glGetUniformLocation(ProgramId, "light.La");
@@ -191,10 +190,10 @@ void MainApp::InitViewMtrx()
 {
 	glm::mat4 tempR, tempT, tempS;
 	rotateMtrx = glm::rotate(tempR, 90.0f, vec3(0.0f, 1.0f, 0.0f));
-	transMtrx = glm::translate(tempT, vec3(0.0f, -2.0f, -5.0f));
+	transMtrx = glm::translate(tempT, vec3(0.0f, -3.0f, -5.0f));
 	scaleMtrx = glm::scale(tempS, vec3(20.0f));
 
-	lookAt_Mtrx = glm::lookAtLH(vec3(0.0f, 0.0f, 0.01f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	lookAt_Mtrx = glm::lookAtLH(vec3(0.0f, 0.0f, 0.01f), vec3(0.0f, -1.0f, -5.0f), vec3(0.0f, 1.0f, 0.0f));
 }
 
 void MainApp::getViewMtrx()
