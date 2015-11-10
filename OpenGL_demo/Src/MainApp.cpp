@@ -15,7 +15,7 @@ public:
 	void Init(int argc, char** argv);
 
 	void ResizeWindow(int width, int hight);
-	void CalculateMVP();
+	void calculateMVP();
 
 	static	MainApp*	p_mApp;
 	glm::mat4			MVP;
@@ -30,8 +30,9 @@ protected:
 
 private:
 	void InitViewMtrx();
-	void getProjectionMtrx();
-	void getViewMtrx();
+	glm::mat4 getProjectionMtrx();
+	glm::mat4 getViewMtrx();
+	glm::mat4 getWorldTrans();
 	void updateRotate_Y();
 	void calcuateNormalMtrx();
 
@@ -44,6 +45,7 @@ private:
 	glm::mat4 scaleMtrx = glm::mat4(1.0f);
 	glm::mat4 rotateMtrx = glm::mat4(1.0f);
 	glm::mat4 lookAt_Mtrx = glm::mat4(1.0f);
+	glm::mat4 wordTransMtrx;
 
 	GLuint t = 0;
 	GLuint slow_tag;
@@ -89,13 +91,13 @@ void MainApp::Init(int argc, char** argv)
 	PositionBufferId = vboHandles[0];
 	NormalBufferId = vboHandles[1];
 	
-	model->Load("../model/bunny.ply");
+	model->Load("../model/bunny_smooth.ply");
 
 	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
 	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * (model->numFaces), model->faceTriangles, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, NormalBufferId);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * (model->numFaces), model->normals, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float)* (model->numFaces), model->verticesNormals, GL_STATIC_DRAW);
 
 	InitLight(mLight);
 	InitMaterial(mMaterial);
@@ -115,7 +117,7 @@ void MainApp::Init(int argc, char** argv)
 
 	getProjectionMtrx();
 	InitViewMtrx();
-	CalculateMVP();
+	calculateMVP();
 }
 
 void MainApp::RenderFunc(void)
@@ -123,18 +125,16 @@ void MainApp::RenderFunc(void)
 	FrameCount++;
 	app.updateRotate_Y();
 	app.getViewMtrx();
-	app.CalculateMVP();
+	app.calculateMVP();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	const glm::mat4 worldTransMtrx = app.getWorldTrans();
+	GLuint world_trans_loc = glGetUniformLocation(ProgramId, "WorldTransMtrx");
+	glUniformMatrix4fv(world_trans_loc, 1, GL_FALSE, &worldTransMtrx[0][0]);
+
 	GLuint MVP_loc = glGetUniformLocation(ProgramId, "MVP");
 	glUniformMatrix4fv(MVP_loc, 1, GL_FALSE, &(app.MVP[0][0]));
-
-	GLuint model_view_loc = glGetUniformLocation(ProgramId, "ModelViewMtrx");
-	glUniformMatrix4fv(model_view_loc, 1, GL_FALSE, &app.ViewMtrx[0][0]);
-
-	GLuint model_loc = glGetUniformLocation(ProgramId, "ModelMtrx");
-	glUniformMatrix4fv(model_loc, 1, GL_FALSE, &app.ModelMtrx[0][0]);
 
 	// share light info to shader.
 	GLuint light_pos_loc = glGetUniformLocation(ProgramId, "light.position");
@@ -159,6 +159,7 @@ void MainApp::RenderFunc(void)
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_FRONT);
+	glShadeModel(GL_SMOOTH);
 
 	glBindVertexArray(VaoId);
 	glDrawArrays(GL_TRIANGLES, 0, model->numFaces * 9);
@@ -181,29 +182,36 @@ void MainApp::ResizeWindow(int width, int hight)
 	app.ResizeViewportFunc(width, hight);
 }
 
-void MainApp::getProjectionMtrx()
+glm::mat4 MainApp::getProjectionMtrx()
 {
 	ProjectionMtrx = glm::perspectiveLH(45.0f, 1024.0f / 720.0f, 1.0f, 80.0f);
+	return ProjectionMtrx;
+}
+
+glm::mat4 MainApp::getViewMtrx()
+{
+	ViewMtrx = lookAt_Mtrx * transMtrx * rotateMtrx * scaleMtrx;
+	return ViewMtrx;
 }
 
 void MainApp::InitViewMtrx()
 {
 	glm::mat4 tempR, tempT, tempS;
 	rotateMtrx = glm::rotate(tempR, 90.0f, vec3(0.0f, 1.0f, 0.0f));
-	transMtrx = glm::translate(tempT, vec3(0.0f, -3.0f, -5.0f));
+	transMtrx = glm::translate(tempT, vec3(0.0f, 0.0f, -5.0f));
 	scaleMtrx = glm::scale(tempS, vec3(20.0f));
 
-	lookAt_Mtrx = glm::lookAtLH(vec3(0.0f, 0.0f, 0.01f), vec3(0.0f, -1.0f, -5.0f), vec3(0.0f, 1.0f, 0.0f));
+	lookAt_Mtrx = glm::lookAtLH(vec3(0.0f, 4.0f, 0.01f), vec3(0.0f, 2.0f, -5.0f), vec3(0.0f, 1.0f, 0.0f));
 }
 
-void MainApp::getViewMtrx()
-{
-	ViewMtrx = lookAt_Mtrx * transMtrx * rotateMtrx * scaleMtrx;
-}
-
-void MainApp::CalculateMVP()
+void MainApp::calculateMVP()
 {
 	MVP = ProjectionMtrx * ViewMtrx * ModelMtrx;
+}
+
+glm::mat4 MainApp::getWorldTrans()
+{
+	return transMtrx * rotateMtrx * scaleMtrx;
 }
 
 void MainApp::updateRotate_Y()
@@ -216,12 +224,6 @@ void MainApp::updateRotate_Y()
 
 	rotateMtrx = glm::rotate_slow(temp, (float)tem*36.0f, vec3(0.0f, 1.0f, 0.0f));
 }
-
-void MainApp::calcuateNormalMtrx()
-{
-
-}
-
 
 int main(int argc, char** argv)
 {
