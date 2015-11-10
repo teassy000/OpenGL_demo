@@ -20,7 +20,9 @@ class Model_PLY {
 public:
 	Model_PLY();
 	
-	GLuint	Load(GLchar* filename);
+	GLuint  Load(GLchar* filename);
+	GLuint	LoadFlat(GLchar* filename);
+	GLuint  LoadSmooth(GLchar* filename);
 	ply_Info* getInfo();
 
 	GLvoid	calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & norm);
@@ -32,7 +34,7 @@ public:
 
 	float*	vertexBuffer;
 	float*	faceTriangles;
-	float*	normals;
+	float*  verticesNormals; // for each triangle
 
 };
 
