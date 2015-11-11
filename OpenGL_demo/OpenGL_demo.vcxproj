@@ -82,6 +82,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\demo_base.h" />
+    <ClInclude Include="..\headers\lights.h" />
     <ClInclude Include="..\headers\LoadShaders.h" />
     <ClInclude Include="..\headers\ply_file.h" />
   </ItemGroup>
