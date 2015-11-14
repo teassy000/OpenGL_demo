@@ -46,5 +46,6 @@ void main()
 		spec = light.Ls * material.Ks * pow( max( dot(r, v), 0.0f), material.shininess);
 	}
 
-	FragColor = vec4(spec + diffuse+ambient, 1.0);
+	//FragColor = vec4(spec + diffuse+ambient, 1.0);
+	FragColor = vec4(norm, 1.0f);
 }

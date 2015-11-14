@@ -59,7 +59,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,10 +84,12 @@
     <ClInclude Include="..\headers\demo_base.h" />
     <ClInclude Include="..\headers\lights.h" />
     <ClInclude Include="..\headers\LoadShaders.h" />
+    <ClInclude Include="..\headers\LoadTextures.h" />
     <ClInclude Include="..\headers\ply_file.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\LoadShaders.cpp" />
+    <ClCompile Include="Src\LoadTextures.cpp" />
     <ClCompile Include="Src\MainApp.cpp" />
     <ClCompile Include="Src\ply_file.cpp" />
   </ItemGroup>

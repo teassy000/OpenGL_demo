@@ -63,7 +63,7 @@ void GL_Demo_Base::Init(int argc, char** argv)
 
 	std::cout << "INFO: OpenGL Version : " << glGetString(GL_VERSION) << std::endl;
 
-	glClearColor(0.3f, 0.3f, 0.3f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 }
 

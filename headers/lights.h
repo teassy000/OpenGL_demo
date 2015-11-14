@@ -25,19 +25,19 @@ struct MaterialInfo
 // initialize light to a fixed value.
 void InitLight(LightInfo &light_info)
 {
-	light_info.position = glm::vec4(600.0f, 10000, 40.0f, 1.0f);
-	light_info.Ld = vec3(0.4f, 0.5f, 0.2f);
-	light_info.La = vec3(0.4f, 0.5f, 0.2f);
-	light_info.Ls = vec3(0.4f, 0.5f, 0.2f);
+	light_info.position = glm::vec4(60.0f, 20.0f, 40.0f, 1.0f);
+	light_info.Ld = vec3(0.8f, 0.8f, 0.8f);
+	light_info.La = vec3(0.8f, 0.8f, 0.8f);
+	light_info.Ls = vec3(0.8f, 0.8f, 0.8f);
 }
 
 void InitMaterial(MaterialInfo &material_info)
 {
-	material_info.Kd = vec3(0.4f, 0.5f, 0.2f);
-	material_info.Ka = vec3(0.4f, 0.5f, 0.2f);
-	material_info.Ks = vec3(0.4f, 0.5f, 0.2f);
+	material_info.Kd = vec3(0.3f, 0.3f, 0.3f);
+	material_info.Ka = vec3(0.4f, 0.4f, 0.4f);
+	material_info.Ks = vec3(0.6f, 0.6f, 0.6f);
 
-	material_info.shininess = 0.3f;
+	material_info.shininess = 10.0f;
 }
 
 #endif
