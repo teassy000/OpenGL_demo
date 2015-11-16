@@ -5,6 +5,7 @@
 
 #include "ply_file.h"
 #include "lights.h"
+#include "LoadTextures.h"
 
 #define WINDOW_TITLE_PREFIX "First_Runnable_Demo"
 
@@ -57,9 +58,11 @@ GLuint	VertexShaderId,
 	VaoId = 0,
 	VboId,
 	PositionBufferId,
-	NormalBufferId;
+	NormalBufferId,
+	vUVId;
 
 static Model_PLY* model = new Model_PLY;
+static Images*	texture = new Images;
 
 void MainApp::Init(int argc, char** argv)
 {
@@ -81,23 +84,30 @@ void MainApp::Init(int argc, char** argv)
 
 	glBindAttribLocation(ProgramId, 0, "vert_pos");
 	glBindAttribLocation(ProgramId, 1, "vert_norm");
+	glBindAttribLocation(ProgramId, 2, "vert_uv");
 	
 	LinkShader(ProgramId, shader_info);
 
 	glUseProgram(ProgramId);
 
-	GLuint vboHandles[2];
-	glGenBuffers(2, vboHandles);
-	PositionBufferId = vboHandles[0];
-	NormalBufferId = vboHandles[1];
+	GLuint vboHandles[3];
+	glGenBuffers(3, vboHandles);
+	PositionBufferId	= vboHandles[0];
+	NormalBufferId		= vboHandles[1];
+	vUVId				= vboHandles[2];
+
 	
-	model->Load("../model/bunny_smooth.ply");
+	model->Load("../model/bunny_smooth_uv.ply");
+	texture->LoadImages("../textures/norm.png");
 
 	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
 	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * (model->numFaces), model->faceTriangles, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ARRAY_BUFFER, NormalBufferId);
 	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float)* (model->numFaces), model->verticesNormals, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vUVId);
+	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float) * (model->numFaces), model->uvBuffer, GL_STATIC_DRAW);
 
 	InitLight(mLight);
 	InitMaterial(mMaterial);
@@ -155,6 +165,9 @@ void MainApp::RenderFunc(void)
 	glUniform3fv(mtr_Ks_loc, 1, &app.mMaterial.Ks[0]);
 	GLuint mtr_shns_loc = glGetUniformLocation(ProgramId, "material.shininess");
 	glUniform1f(mtr_shns_loc, app.mMaterial.shininess);
+
+	int texLoc = glGetUniformLocation(ProgramId, "TexUV");
+	glUniform1i(texLoc, 0);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);

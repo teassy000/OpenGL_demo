@@ -7,6 +7,7 @@
 
 #include "SOIL.h"
 #include <string>
+#include "GL/glew.h"
 
 class Images
 {
@@ -15,11 +16,14 @@ public:
 	~Images(){};
 
 	int LoadImages(std::string);
+	GLuint getTextureID() const;
 
 private:
 	int width;
 	int hight;
 	int channels;
+
+	GLuint TextureID;
 };
 
 

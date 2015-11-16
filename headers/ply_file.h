@@ -21,8 +21,6 @@ public:
 	Model_PLY();
 	
 	GLuint  Load(GLchar* filename);
-	GLuint	LoadFlat(GLchar* filename);
-	GLuint  LoadSmooth(GLchar* filename);
 	ply_Info* getInfo();
 
 	GLvoid	calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & norm);
@@ -35,6 +33,13 @@ public:
 	float*	vertexBuffer;
 	float*	faceTriangles;
 	float*  verticesNormals; // for each triangle
+	float*	uvBuffer;
+	float*	vertexuv;
+
+private:
+	GLuint	LoadFlat(GLchar* filename);
+	GLuint  LoadSmooth(GLchar* filename);
+	GLuint	Loaduv(GLchar* filename);
 
 };
 

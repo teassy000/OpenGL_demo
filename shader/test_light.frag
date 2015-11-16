@@ -2,6 +2,9 @@
 
 in vec3 tnorm;
 in vec4 eyeCoords;
+in vec2 texCrood;
+
+uniform sampler2D TexUV;
 
 out vec4 FragColor;
 
@@ -46,6 +49,9 @@ void main()
 		spec = light.Ls * material.Ks * pow( max( dot(r, v), 0.0f), material.shininess);
 	}
 
+	vec4 texColor = texture(TexUV, texCrood);
+
 	//FragColor = vec4(spec + diffuse+ambient, 1.0);
-	FragColor = vec4(norm, 1.0f);
+	//FragColor = vec4(norm, 1.0f);
+	FragColor = texColor;
 }
