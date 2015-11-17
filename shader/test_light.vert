@@ -16,6 +16,7 @@ out vec2 texCrood;
 
 void main()
 {
+	
 	tnorm = (WorldTransMtrx * vec4(vert_norm, 0.0)).xyz;
 
 	eyeCoords = MVP * mat4(1.0f) * vec4(vert_pos, 1.0f);

@@ -118,12 +118,17 @@ void MainApp::Init(int argc, char** argv)
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 0, (GLubyte*)NULL);
 
 	glBindBuffer(GL_ARRAY_BUFFER, NormalBufferId);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (GLubyte*)NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vUVId);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+
 
 	getProjectionMtrx();
 	InitViewMtrx();
@@ -165,9 +170,6 @@ void MainApp::RenderFunc(void)
 	glUniform3fv(mtr_Ks_loc, 1, &app.mMaterial.Ks[0]);
 	GLuint mtr_shns_loc = glGetUniformLocation(ProgramId, "material.shininess");
 	glUniform1f(mtr_shns_loc, app.mMaterial.shininess);
-
-	int texLoc = glGetUniformLocation(ProgramId, "TexUV");
-	glUniform1i(texLoc, 0);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
@@ -235,7 +237,7 @@ void MainApp::updateRotate_Y()
 
 	glm::mat4(temp);
 
-	rotateMtrx = glm::rotate_slow(temp, (float)tem*36.0f, vec3(0.0f, 1.0f, 0.0f));
+	rotateMtrx = glm::rotate_slow(temp, (float)tem*9.0f, vec3(0.0f, 1.0f, 0.0f));
 }
 
 int main(int argc, char** argv)

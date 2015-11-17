@@ -40,6 +40,8 @@ int Images::LoadImages(std::string filename)
 			++index2;
 		}
 	}
+
+	std::cout << "width and hight is: " << width << "x" << hight << std::endl;
 	
 
 	// Load texture into OpenGL
@@ -53,5 +55,7 @@ int Images::LoadImages(std::string filename)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, hight, 0, GL_RGB,
 		GL_UNSIGNED_BYTE, pData);
 	SOIL_free_image_data(pData);
+
+	return 0;
 }
 

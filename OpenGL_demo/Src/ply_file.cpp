@@ -15,9 +15,13 @@ vertexuv(nullptr)
 
 GLuint Model_PLY::Load(GLchar* filename)
 {
-	char* pch_smooth = strstr(filename, "_smooth_");
+	char* pch_smooth = strstr(filename, "_smooth");
 	char* pch_uv = strstr(filename, "_smooth_uv");
-	if (pch_smooth != nullptr)
+	if (pch_uv != nullptr)
+	{
+		return  Loaduv(filename);
+	}
+	else if (pch_smooth != nullptr)
 	{
 		return LoadSmooth(filename);
 	}
