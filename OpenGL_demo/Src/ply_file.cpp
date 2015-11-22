@@ -45,6 +45,11 @@ void Model_PLY::calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & no
 	glm::normalize(norm);
 }
 
+void Model_PLY::calculateTangentMtrx(vec3 point1, vec3 point2, vec3 point3, vec2 st, glm::mat3 & mat)
+{
+	
+}
+
 GLuint Model_PLY::LoadFlat(GLchar* filename)
 {
 	char* pch = strstr(filename, ".ply");
@@ -363,7 +368,6 @@ GLuint Model_PLY::Loaduv(GLchar* filename)
 
 		faceTriangles = (float*)malloc(fileSize * sizeof(float));
 		verticesNormals = (float*)malloc(fileSize * sizeof(float));
-		vertexuv = (float*)malloc(fileSize * sizeof(float));
 
 
 		if (file != nullptr)
@@ -408,16 +412,17 @@ GLuint Model_PLY::Loaduv(GLchar* filename)
 
 
 			// Read vertexes
-			int i = 0, j = 0;
+			int i = 0;
 			for (GLuint iter = 0; iter < this->numConnectedPoints; ++iter)
 			{
 				fgets(buffer, 300, file);
 
 				// i to (i+2) is position of vertex, (i+3) to (i+5) is normal of vertex;
 				sscanf_s(buffer, "%f %f %f %f %f %f %f %f", &vertexBuffer[i], &vertexBuffer[i + 1], &vertexBuffer[i + 2],
-					&vertexBuffer[i + 3], &vertexBuffer[i + 4], &vertexBuffer[i + 5], &vertexuv[j], &vertexuv[j + 1]);
-				i += 6;
-				j += 2;
+					&vertexBuffer[i + 3], &vertexBuffer[i + 4], &vertexBuffer[i + 5], &vertexBuffer[i + 6], &vertexBuffer[i + 7]);
+
+				assert(vertexBuffer[i + 6] >= 0.0f && vertexBuffer[i + 7] >= 0.0f);
+				i += 8;
 			}
 
 			// Read faces
@@ -434,35 +439,42 @@ GLuint Model_PLY::Loaduv(GLchar* filename)
 					buffer[0] = ' ';
 					sscanf_s(buffer, "%i%i%i", &vert0, &vert1, &vert2);
 
+					if (vert0 == 0)
+					{
+						std::cout << vert0 << " " << vertexBuffer[8* vert0 + 6] << " " << vertexBuffer[8*vert0 + 7] << std::endl;
+					}
+					
+
 					// set values to faceTriangles.
-					faceTriangles[triangleIndex] = vertexBuffer[6 * vert0];
-					faceTriangles[triangleIndex + 1] = vertexBuffer[6 * vert0 + 1];
-					faceTriangles[triangleIndex + 2] = vertexBuffer[6 * vert0 + 2];
-					faceTriangles[triangleIndex + 3] = vertexBuffer[6 * vert1];
-					faceTriangles[triangleIndex + 4] = vertexBuffer[6 * vert1 + 1];
-					faceTriangles[triangleIndex + 5] = vertexBuffer[6 * vert1 + 2];
-					faceTriangles[triangleIndex + 6] = vertexBuffer[6 * vert2];
-					faceTriangles[triangleIndex + 7] = vertexBuffer[6 * vert2 + 1];
-					faceTriangles[triangleIndex + 8] = vertexBuffer[6 * vert2 + 2];
+					faceTriangles[triangleIndex] = vertexBuffer[8 * vert0];
+					faceTriangles[triangleIndex + 1] = vertexBuffer[8 * vert0 + 1];
+					faceTriangles[triangleIndex + 2] = vertexBuffer[8 * vert0 + 2];
+					faceTriangles[triangleIndex + 3] = vertexBuffer[8 * vert1];
+					faceTriangles[triangleIndex + 4] = vertexBuffer[8 * vert1 + 1];
+					faceTriangles[triangleIndex + 5] = vertexBuffer[8 * vert1 + 2];
+					faceTriangles[triangleIndex + 6] = vertexBuffer[8 * vert2];
+					faceTriangles[triangleIndex + 7] = vertexBuffer[8 * vert2 + 1];
+					faceTriangles[triangleIndex + 8] = vertexBuffer[8 * vert2 + 2];
 
 
-					verticesNormals[normalIndex] = vertexBuffer[6 * vert0 + 3];
-					verticesNormals[normalIndex + 1] = vertexBuffer[6 * vert0 + 4];
-					verticesNormals[normalIndex + 2] = vertexBuffer[6 * vert0 + 5];
-					verticesNormals[normalIndex + 3] = vertexBuffer[6 * vert1 + 3];
-					verticesNormals[normalIndex + 4] = vertexBuffer[6 * vert1 + 4];
-					verticesNormals[normalIndex + 5] = vertexBuffer[6 * vert1 + 5];
-					verticesNormals[normalIndex + 6] = vertexBuffer[6 * vert2 + 3];
-					verticesNormals[normalIndex + 7] = vertexBuffer[6 * vert2 + 4];
-					verticesNormals[normalIndex + 8] = vertexBuffer[6 * vert2 + 5];
+					verticesNormals[normalIndex] = vertexBuffer[8 * vert0 + 3];
+					verticesNormals[normalIndex + 1] = vertexBuffer[8 * vert0 + 4];
+					verticesNormals[normalIndex + 2] = vertexBuffer[8 * vert0 + 5];
+					verticesNormals[normalIndex + 3] = vertexBuffer[8 * vert1 + 3];
+					verticesNormals[normalIndex + 4] = vertexBuffer[8 * vert1 + 4];
+					verticesNormals[normalIndex + 5] = vertexBuffer[8 * vert1 + 5];
+					verticesNormals[normalIndex + 6] = vertexBuffer[8 * vert2 + 3];
+					verticesNormals[normalIndex + 7] = vertexBuffer[8 * vert2 + 4];
+					verticesNormals[normalIndex + 8] = vertexBuffer[8 * vert2 + 5];
 
 					// set uv for each triangle.
-					uvBuffer[uvIndex] = vertexuv[vert0];
-					uvBuffer[uvIndex + 1] = vertexuv[vert0 + 1];
-					uvBuffer[uvIndex + 2] = vertexuv[vert1];
-					uvBuffer[uvIndex + 3] = vertexuv[vert1 + 1];
-					uvBuffer[uvIndex + 4] = vertexuv[vert2];
-					uvBuffer[uvIndex + 5] = vertexuv[vert2 + 1];
+					uvBuffer[uvIndex] = vertexBuffer[8 * vert0 + 6];
+					uvBuffer[uvIndex + 1] = vertexBuffer[8 * vert0 + 7];
+					uvBuffer[uvIndex + 2] = vertexBuffer[8 * vert1 + 6];
+					uvBuffer[uvIndex + 3] = vertexBuffer[8 * vert1 + 7];
+					uvBuffer[uvIndex + 4] = vertexBuffer[8 * vert2 + 6];
+					uvBuffer[uvIndex + 5] = vertexBuffer[8 * vert2 + 7];
+
 
 					uvIndex += 6;
 					normalIndex += 9; //set offset to next triangle. 

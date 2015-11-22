@@ -15,7 +15,8 @@ public:
 	Images();
 	~Images(){};
 
-	int LoadImages(std::string);
+	bool LoadImages(std::string);
+	void Bind(GLenum);
 	GLuint getTextureID() const;
 
 private:
@@ -23,6 +24,7 @@ private:
 	int hight;
 	int channels;
 
+	GLenum textureTarget;
 	GLuint TextureID;
 };
 

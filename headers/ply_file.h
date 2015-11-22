@@ -6,6 +6,7 @@
 #include <string>
 
 using glm::vec3;
+using glm::vec2;
 
 struct ply_Info
 {
@@ -23,7 +24,7 @@ public:
 	GLuint  Load(GLchar* filename);
 	ply_Info* getInfo();
 
-	GLvoid	calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & norm);
+	//GLvoid	calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & norm);
 
 // need a interface to get these value
 	GLuint	numConnectedTriangles;
@@ -40,6 +41,9 @@ private:
 	GLuint	LoadFlat(GLchar* filename);
 	GLuint  LoadSmooth(GLchar* filename);
 	GLuint	Loaduv(GLchar* filename);
+
+	GLvoid	calculateNormal(vec3 point1, vec3 point2, vec3 point3, vec3 & norm);
+	GLvoid	calculateTangentMtrx(vec3 point1, vec3 point2, vec3 point3, vec2 st, glm::mat3&);
 
 };
 

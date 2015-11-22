@@ -59,7 +59,8 @@ GLuint	VertexShaderId,
 	VboId,
 	PositionBufferId,
 	NormalBufferId,
-	vUVId;
+	vUVId,
+	bunny_samplerID;
 
 static Model_PLY* model = new Model_PLY;
 static Images*	texture = new Images;
@@ -98,7 +99,8 @@ void MainApp::Init(int argc, char** argv)
 
 	
 	model->Load("../model/bunny_smooth_uv.ply");
-	texture->LoadImages("../textures/norm.png");
+	texture->LoadImages("../textures/Untitled.003.jpg");
+	texture->Bind(GL_TEXTURE0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, PositionBufferId);
 	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * (model->numFaces), model->faceTriangles, GL_STATIC_DRAW);
@@ -113,7 +115,7 @@ void MainApp::Init(int argc, char** argv)
 	InitMaterial(mMaterial);
 
 	// Create a set of vertex array object.	
-	glGenVertexArrays(1, &VaoId);
+	glGenVertexArrays(2, &VaoId);
 	glBindVertexArray(VaoId);
 
 	glEnableVertexAttribArray(0);
@@ -129,10 +131,24 @@ void MainApp::Init(int argc, char** argv)
 	glBindBuffer(GL_ARRAY_BUFFER, vUVId);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 
-
 	getProjectionMtrx();
 	InitViewMtrx();
 	calculateMVP();
+
+
+	glGenSamplers(1, &bunny_samplerID);
+	glSamplerParameteri(bunny_samplerID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glSamplerParameteri(bunny_samplerID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glSamplerParameteri(bunny_samplerID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+
+	glBindSampler(0, bunny_samplerID);
+
+	int bunny_samplerLoc = glGetUniformLocation(ProgramId, "Tex");
+
+	std::cout << "sampler ID is: " << bunny_samplerLoc << std::endl;
+	std::cout << "sampler ID is: " << bunny_samplerID << std::endl;
+	glUniform1i(bunny_samplerLoc, GL_TEXTURE0);
+
 }
 
 void MainApp::RenderFunc(void)
